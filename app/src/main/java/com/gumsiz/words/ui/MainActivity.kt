@@ -1,7 +1,7 @@
-package com.gumsiz.words
+package com.gumsiz.words.ui
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.gumsiz.words.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
