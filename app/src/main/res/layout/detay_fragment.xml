@@ -1,13 +1,253 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.detayf.DetayFragment">
+    android:background="#FFFFFF">
 
-    <TextView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Hello" />
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        tools:context=".ui.detayf.DetayFragment">
 
-</FrameLayout>
+
+        <TextView
+            android:id="@+id/name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/translation_card"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Name" />
+
+        <!--<Button
+            android:id="@+id/translate_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/btn_translation"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toBottomOf="@+id/name_txt"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/name_txt" />-->
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/translation_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            app:cardBackgroundColor="@color/primaryLightColor"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/ckm_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/name_txt">
+
+            <TextView
+                android:id="@+id/trans_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/trans_title"
+                android:textStyle="italic"
+                android:textSize="24sp"
+                android:background="@color/primaryColor"
+                android:padding="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/translation_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:padding="8dp"
+                tools:text="Struktur">
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/translate_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_margin="8dp"
+                    android:clickable="true"
+                    app:backgroundTint="@color/primaryColor"
+                    app:srcCompat="@android:drawable/ic_input_add" />
+
+                <!--<Button
+                    android:id="@+id/translate_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:background="@color/primaryColor"
+                    android:text="@string/btn_translation"
+                    android:textAllCaps="false" />-->
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/ckm_card"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:cardBackgroundColor="@color/primaryLightColor"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/struktur_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/translation_card">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/ckm_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/ckm_title"
+                    android:textStyle="italic"
+                    android:textSize="24sp"
+                    android:background="@color/primaryColor"
+                    android:padding="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/ckm_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/cekim_1_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    tools:text="Cekim_1" />
+
+                <TextView
+                    android:id="@+id/cekim_2_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    tools:text="Cekim_2" />
+
+                <TextView
+                    android:id="@+id/imp_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    tools:text="Imperative" />
+
+                <TextView
+                    android:id="@+id/pret_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    tools:text="Prateritum" />
+
+                <TextView
+                    android:id="@+id/perf_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    tools:text="Perfekt" />
+
+                <TextView
+                    android:id="@+id/konj_txt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    tools:text="Konjektive_2" />
+            </LinearLayout></LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/struktur_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            app:cardBackgroundColor="@color/primaryLightColor"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/beispiel_card"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ckm_card">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+            <TextView
+                android:id="@+id/struktur_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/struktur_title"
+                android:textStyle="italic"
+                android:textSize="24sp"
+                android:background="@color/primaryColor"
+                android:padding="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/struktur_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="8dp"
+                tools:text="Struktur"></LinearLayout></LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/beispiel_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            app:cardBackgroundColor="@color/primaryLightColor"
+            app:cardCornerRadius="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/struktur_card">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/beispiel_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/beispiel_title"
+                android:textStyle="italic"
+                android:textSize="24sp"
+                android:background="@color/primaryColor"
+                android:padding="8dp"/>
+
+            <LinearLayout
+                android:id="@+id/beispiel_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical"
+                android:padding="8dp"
+                tools:text="Beispiel"></LinearLayout></LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/fav_menu_btn"
+        android:icon="@android:drawable/btn_star_big_off"
+        android:title="Fav"
+        app:showAsAction="always" />
+</menu>

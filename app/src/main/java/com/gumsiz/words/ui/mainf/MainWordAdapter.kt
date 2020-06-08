@@ -6,15 +6,16 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
-import android.widget.Toast
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.google.gson.Gson
 import com.gumsiz.words.R
-import com.gumsiz.words.data.db.WordDB
+import com.gumsiz.words.data.Word
 import java.util.*
 
-class MainWordAdapter(private var list: List<WordDB>) : RecyclerView.Adapter<TextItemViewHolder>(),
+class MainWordAdapter(private var list: List<Word>) : RecyclerView.Adapter<TextItemViewHolder>(),
     Filterable {
-    var data = listOf<WordDB>()
+    var data = listOf<Word>()
     lateinit var mcontext: Context
 
     init {
@@ -23,7 +24,8 @@ class MainWordAdapter(private var list: List<WordDB>) : RecyclerView.Adapter<Tex
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TextItemViewHolder {
         val view: TextView =
-            LayoutInflater.from(parent.context).inflate(R.layout.text_item, parent, false) as TextView
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.text_item, parent, false) as TextView
         mcontext = parent.context
         return TextItemViewHolder(view)
     }
@@ -34,7 +36,12 @@ class MainWordAdapter(private var list: List<WordDB>) : RecyclerView.Adapter<Tex
         val item = data[position]
         holder.textView.text = item.name
         holder.itemView.setOnClickListener {
-            Toast.makeText(mcontext, item.wordId.toString(), Toast.LENGTH_SHORT).show()
+            val madap = Gson()
+            it.findNavController().navigate(
+                MainFragmentDirections.actionMainFragmentToDetayFragment(
+                    madap.toJson(item).toString()
+                )
+            )
         }
     }
 
@@ -46,7 +53,7 @@ class MainWordAdapter(private var list: List<WordDB>) : RecyclerView.Adapter<Tex
                 if (charSearch.isEmpty()) {
                     data = list
                 } else {
-                    val resultList = mutableListOf<WordDB>()
+                    val resultList = mutableListOf<Word>()
                     for (row in list) {
                         if (row.name.contains(charSearch.toLowerCase(Locale.ROOT))) {
                             resultList.add(row)
@@ -60,12 +67,19 @@ class MainWordAdapter(private var list: List<WordDB>) : RecyclerView.Adapter<Tex
             }
 
             override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
-                data = p1?.values as List<WordDB>
+                data = p1?.values as List<Word>
                 notifyDataSetChanged()
             }
         }
     }
 
+    fun addWords(words: List<Word>) {
+        this.data.apply {
+            data = words
+        }
+    }
+
 }
+
 
 class TextItemViewHolder(val textView: TextView) : RecyclerView.ViewHolder(textView)

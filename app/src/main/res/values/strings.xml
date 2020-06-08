@@ -1,3 +1,15 @@
 <resources>
-    <string name="app_name">Words</string>
+    <string name="app_name">Verben</string>
+    <string name="btn_translation"> Übersetzung hinzufügen</string>
+    <string name="search_bar_hint">Geben Sie ein Wort ein</string>
+    <string name="load_message">Vorbereitung für den ersten Gebrauch</string>
+    <string name="trans_title">Übersetzung</string>
+    <string name="dialog_title">Übersetzung</string>
+    <string name="ckm_title">Konjugationen</string>
+    <string name="struktur_title">Strukturen</string>
+    <string name="beispiel_title">Beispiele</string>
+    <string name="btn_save">Speichern</string>
+    <string name="btn_menu_update">Aktualisieren</string>
+    <string name="btn_menu_about">Über App</string>
+    <string name="txt_about">Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für ErwachsenE)</string>
 </resources>

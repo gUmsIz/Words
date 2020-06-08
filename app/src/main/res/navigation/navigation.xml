@@ -17,5 +17,21 @@
         android:id="@+id/detayFragment"
         android:name="com.gumsiz.words.ui.detayf.DetayFragment"
         android:label="detay_fragment"
-        tools:layout="@layout/detay_fragment" />
+        tools:layout="@layout/detay_fragment" >
+        <argument
+            android:name="wordId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_detayFragment_to_translationFragment"
+            app:destination="@id/translationFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/translationFragment"
+        android:name="com.gumsiz.words.ui.detayf.TranslationFragment"
+        android:label="TranslationFragment"
+        tools:layout="@layout/translation_fragment">
+        <argument
+            android:name="word"
+            app:argType="string" />
+    </dialog>
 </navigation>

@@ -1,41 +1,41 @@
 package com.gumsiz.words.ui.mainf
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.gumsiz.words.data.db.WordDB
+import androidx.lifecycle.liveData
+import com.gumsiz.words.R
+import com.gumsiz.words.data.Word
+import com.gumsiz.words.data.WordRepository
 import com.gumsiz.words.data.db.WordsDAO
+import com.gumsiz.words.data.utils.Resource
 import kotlinx.coroutines.*
+import java.lang.Exception
 
-class MainViewModel(val database: WordsDAO, application: Application) :
+class MainViewModel(database: WordsDAO, application: Application) :
     AndroidViewModel(application) {
     //CoroutineJOB
     private var viewModelJob = Job()
 
+    val msg=application.getString(R.string.load_message)
+
     // Coroutine Scope
     private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
-    var word1 = WordDB()
-    var word2 = WordDB()
-    var word3 = WordDB()
-    var word4 = WordDB()
-    var word5 = WordDB()
-    var word6 = WordDB()
-    var word7 = WordDB()
-    var word8 = WordDB()
-    var word9 = WordDB()
-    var word10 = WordDB()
+    val repository = WordRepository(database, application)
 
+    val sData = application.getSharedPreferences("data", Context.MODE_PRIVATE)
+
+    
     //List of words from db
-    private var _data = MutableLiveData<List<WordDB>>()
+    //private var _data = repository.wordlist as MutableLiveData<List<Word>>
 
-    val data: LiveData<List<WordDB>>
-        get() = _data
+    val data: LiveData<List<Word>> = repository.wordlist
+        //get() = _data
 
     init {
-        makeWords()
-        entrWord()
+        prepare()
     }
 
     override fun onCleared() {
@@ -43,58 +43,26 @@ class MainViewModel(val database: WordsDAO, application: Application) :
         viewModelJob.cancel()
     }
 
-    private fun getWord() {
-        scope.launch {
-            _data.value = getFromDB()
+    fun update(){
+        sData.edit().putBoolean("dataLoaded",false).apply()
+        prepare()
+    }
+
+
+    fun prepare() = liveData(Dispatchers.IO) {
+        if (!sData.getBoolean("dataLoaded", false)) {
+            emit(Resource.loading(data = null, message = msg ))
+            try {
+                repository.getDatafromServer()
+                sData.edit().putBoolean("dataLoaded", true).apply()
+                emit(Resource.success(data = null))
+
+            } catch (exception: Exception) {
+                emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+            }
+        } else {
+            emit(Resource.success(data = null))
         }
-    }
-
-    private suspend fun getFromDB(): List<WordDB> {
-        return withContext(Dispatchers.IO) {
-            var word = database.getAll()
-            word
-        }
-    }
-
-
-    private fun entrWord() {
-        scope.launch { entWord() }
-    }
-
-    private suspend fun entWord() {
-        withContext(Dispatchers.IO) {
-            database.insert(word1)
-            database.insert(word2)
-            database.insert(word3)
-            getWord()
-        }
-    }
-
-    fun makeWords() {
-        word1.name = "abbiegen"
-        word1.Imp = "bieg ab"
-        word1.firstSg = "biege ab"
-        word1.secondSg = "biegst ab"
-        word1.pret = "bog ab"
-        word1.perfSg = "bin abgebogen"
-        word1.konj2FSg = "böge ab"
-        word1.sampleSentence = "Das Auto biegt in eine Nebenstraße ab."
-        word2.name = "abbrechen"
-        word2.Imp = "brich ab"
-        word2.firstSg = "breche ab"
-        word2.secondSg = "brichst ab"
-        word2.pret = "brach ab"
-        word2.perfSg = "habe/bin abgebrochen"
-        word2.konj2FSg = "bräche ab"
-        word2.sampleSentence = "Der Zweig bricht ab."
-        word3.name = "abbringen"
-        word3.Imp = "bring ab"
-        word3.firstSg = "bringe ab"
-        word3.secondSg = "bringst ab"
-        word3.pret = "brachte ab"
-        word3.perfSg = "habe abgebracht"
-        word3.konj2FSg = "brächte ab"
-        word3.sampleSentence = "Ich bringe dich von deinem Plan ab."
     }
 
 }
