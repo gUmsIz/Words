@@ -1,7 +1,9 @@
 package com.gumsiz.words.ui.mainf
 
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -9,25 +11,26 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.gumsiz.words.data.db.WordsDatabase
 import com.gumsiz.words.data.utils.Status
+import com.gumsiz.words.databinding.MainFavFragmentBinding
 import com.gumsiz.words.databinding.MainFragmentBinding
 
-
-class MainFragment : Fragment() {
+class MainFavFragment : Fragment(){
     // ViewModel impl.
     private lateinit var viewModel: MainViewModel
     private lateinit var viewModelFactory: MainViewModelFactory
     private lateinit var adapter: MainWordAdapter
 
     //ViewBinding impl.
-    private var _binding: MainFragmentBinding? = null
+    private var _binding: MainFavFragmentBinding? = null
     private val binding get() = _binding!!
+
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = MainFragmentBinding.inflate(inflater, container, false)
+        _binding = MainFavFragmentBinding.inflate(inflater, container, false)
         // Room instance
         val db = WordsDatabase.getInstance(this.requireActivity().application).WordsDAO
 
@@ -60,7 +63,7 @@ class MainFragment : Fragment() {
         })
 
 
-        //searchview listener
+        //seracview listener
         binding.searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(p0: String?): Boolean {
                 return false
@@ -80,10 +83,9 @@ class MainFragment : Fragment() {
         _binding = null
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.data.observe(viewLifecycleOwner, Observer {
+        viewModel.favoritedata.observe(viewLifecycleOwner, Observer {
             adapter= MainWordAdapter(it)
             binding.recyclerView.adapter = adapter
             adapter.notifyDataSetChanged()

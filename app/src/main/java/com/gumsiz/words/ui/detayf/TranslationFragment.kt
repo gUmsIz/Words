@@ -3,25 +3,18 @@ package com.gumsiz.words.ui.detayf
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.DialogInterface
-import android.graphics.Color
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.LinearLayout
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.view.get
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import com.google.gson.Gson
 import com.gumsiz.words.R
 import com.gumsiz.words.data.Word
 import com.gumsiz.words.data.db.WordsDatabase
 import com.gumsiz.words.data.toWordDB
-import com.gumsiz.words.databinding.DetayFragmentBinding
 import com.gumsiz.words.databinding.TranslationFragmentBinding
 
 class TranslationFragment : DialogFragment(){
@@ -41,7 +34,6 @@ class TranslationFragment : DialogFragment(){
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         return activity?.let {
             _binding = TranslationFragmentBinding.inflate(LayoutInflater.from(requireContext()))
-            //val db = WordsDatabase.getInstance(this.requireActivity().application).WordsDAO
             val builder=AlertDialog.Builder(it)
             val args=TranslationFragmentArgs.fromBundle(requireArguments())
             val gson=Gson()
@@ -51,7 +43,6 @@ class TranslationFragment : DialogFragment(){
                     val editText=EditText(requireContext())
                     editText.setText(" "+translation)
                     editText.setBackgroundResource(R.drawable.custom_edittext)
-                    //editText.setPadding(8,8,8,8)
                     binding.translationLayout.addView(editText)
                 }
                 val editText=EditText(requireContext())
@@ -81,6 +72,5 @@ class TranslationFragment : DialogFragment(){
     override fun onStart() {
         super.onStart()
         (dialog as AlertDialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(resources.getColor(R.color.primaryDarkColor))
-        //(dialog as AlertDialog).getButton(AlertDialog.BUTTON_NEGATIVE).setBackgroundResource(R.drawable.search_back)
     }
 }

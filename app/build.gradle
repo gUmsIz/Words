@@ -37,6 +37,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
     def nav_version = "2.3.0-alpha06"
     def room_version = "2.2.5"
 
@@ -64,6 +65,8 @@ dependencies {
     // Retrofit for downloadind data
     implementation 'com.squareup.retrofit2:retrofit:2.8.1'
     implementation 'com.squareup.retrofit2:converter-gson:2.8.1'
+
+    implementation "com.google.android.material:material:1.3.0-alpha01"
 
 
 

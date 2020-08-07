@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import android.widget.TextView
+import androidx.core.os.bundleOf
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.google.gson.Gson
@@ -15,6 +16,7 @@ import java.util.*
 
 class MainWordAdapter(private var list: List<Word>) : RecyclerView.Adapter<TextItemViewHolder>(),
     Filterable {
+
     var data = listOf<Word>()
     lateinit var mcontext: Context
 
@@ -37,10 +39,9 @@ class MainWordAdapter(private var list: List<Word>) : RecyclerView.Adapter<TextI
         holder.textView.text = item.name
         holder.itemView.setOnClickListener {
             val madap = Gson()
+            val bundle= bundleOf("word" to madap.toJson(item))
             it.findNavController().navigate(
-                MainFragmentDirections.actionMainFragmentToDetayFragment(
-                    madap.toJson(item).toString()
-                )
+                R.id.action_global_detayFragment,bundle
             )
         }
     }

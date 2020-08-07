@@ -12,4 +12,6 @@
     <string name="btn_menu_update">Aktualisieren</string>
     <string name="btn_menu_about">Über App</string>
     <string name="txt_about">Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für ErwachsenE)</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

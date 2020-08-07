@@ -17,19 +17,19 @@ data class Word(
     , var favorite: Boolean
 )
 
-fun Word.toWordDB():WordDB{
-    val gson=Gson()
+fun Word.toWordDB(): WordDB {
+    val wordJson = Gson()
     return WordDB(
         this.name,
-        gson.toJson(this.translation),
+        wordJson.toJson(this.translation),
         this.firstSg,
         this.secondSg,
         this.imp,
         this.pret,
         this.perfSg,
         this.konj2FSg,
-        gson.toJson(this.structure),
-        gson.toJson(this.sampleSentence),
+        wordJson.toJson(this.structure),
+        wordJson.toJson(this.sampleSentence),
         this.favorite
     )
 }

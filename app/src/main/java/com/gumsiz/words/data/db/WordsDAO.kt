@@ -17,6 +17,6 @@ interface WordsDAO {
     @Query("SELECT * from words_table ")
     fun getAll(): LiveData<List<WordDB>>
 
-    @Query("SELECT * FROM words_table WHERE name LIKE '%' || :value  || '%'")
-    fun getSearch(value: String): LiveData<List<WordDB>>
+    @Query("SELECT * FROM words_table WHERE favorite= 1")
+    fun getSearch(): LiveData<List<WordDB>>
 }

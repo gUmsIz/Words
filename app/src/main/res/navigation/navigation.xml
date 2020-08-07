@@ -3,16 +3,12 @@
             xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainFragment">
+    app:startDestination="@id/containerFragment">
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.gumsiz.words.ui.mainf.MainFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" >
-        <action
-            android:id="@+id/action_mainFragment_to_detayFragment"
-            app:destination="@id/detayFragment" />
-    </fragment>
+        tools:layout="@layout/main_fragment" />
     <fragment
         android:id="@+id/detayFragment"
         android:name="com.gumsiz.words.ui.detayf.DetayFragment"
@@ -34,4 +30,14 @@
             android:name="word"
             app:argType="string" />
     </dialog>
+    <fragment
+        android:id="@+id/containerFragment"
+        android:name="com.gumsiz.words.ui.ContainerFragment"
+        android:label="fragment_container"
+        tools:layout="@layout/fragment_container" />
+    <fragment
+        android:id="@+id/mainFavFragment"
+        android:name="com.gumsiz.words.ui.mainf.MainFavFragment"
+        android:label="MainFavFragment" />
+    <action android:id="@+id/action_global_detayFragment" app:destination="@id/detayFragment" />
 </navigation>

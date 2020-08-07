@@ -5,18 +5,19 @@ import com.gumsiz.words.data.db.WordDB
 
 
 data class WordN(
-    val name:String,
-    val cekim_1:String?,
-    val cekim_2:String?,
-    val imp:String?,
-    val pret:String?,
-    val perf:String?,
-    val konj:String?,
-    val struktur:Array<String?>?,
-    val beispiel:Array<String?>?
-    )
-fun List<WordN>.toDbData():Array<WordDB>{
-    val gson= Gson()
+    val name: String,
+    val cekim_1: String?,
+    val cekim_2: String?,
+    val imp: String?,
+    val pret: String?,
+    val perf: String?,
+    val konj: String?,
+    val struktur: Array<String?>?,
+    val beispiel: Array<String?>?
+)
+
+fun List<WordN>.toDbData(): Array<WordDB> {
+    val gson = Gson()
     return map {
         WordDB(
             it.name,

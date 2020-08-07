@@ -31,7 +31,8 @@ class MainViewModel(database: WordsDAO, application: Application) :
     //List of words from db
     //private var _data = repository.wordlist as MutableLiveData<List<Word>>
 
-    val data: LiveData<List<Word>> = repository.wordlist
+    val data: LiveData<List<Word>> = repository.wordList
+    val favoritedata: LiveData<List<Word>> = repository.wordListFav
         //get() = _data
 
     init {
@@ -53,7 +54,7 @@ class MainViewModel(database: WordsDAO, application: Application) :
         if (!sData.getBoolean("dataLoaded", false)) {
             emit(Resource.loading(data = null, message = msg ))
             try {
-                repository.getDatafromServer()
+                repository.getDataFromServer()
                 sData.edit().putBoolean("dataLoaded", true).apply()
                 emit(Resource.success(data = null))
 

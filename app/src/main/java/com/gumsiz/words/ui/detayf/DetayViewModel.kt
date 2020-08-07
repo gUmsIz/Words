@@ -1,7 +1,6 @@
 package com.gumsiz.words.ui.detayf
 
 import android.app.Application
-import android.view.MenuItem
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
