@@ -4,7 +4,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 
-private const val BASE_URL = "http://gumsiz.hol.es/"
+//TODO Base URL for API
+private const val BASE_URL = "ENTER API URL"
 
 /**
  * object pointing to the desired URL
