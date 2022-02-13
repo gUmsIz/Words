@@ -39,8 +39,15 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.2.0-alpha02"
+    }
 }
 
 dependencies {
@@ -71,4 +78,14 @@ dependencies {
     implementation(Libraries.retrofitGson)
 
     implementation(Libraries.material)
+
+    implementation(Libraries.composeActivity)
+    implementation(Libraries.composeAnimation)
+    implementation(Libraries.composeMaterial)
+    implementation(Libraries.composeUi)
+    implementation(Libraries.composeViewmodel)
+    implementation(Libraries.composeRuntime)
+    implementation(Libraries.composeRuntimeLivedata)
+    implementation(Libraries.composeNavigation)
+//    implementation(Libraries.composeIcons)
 }

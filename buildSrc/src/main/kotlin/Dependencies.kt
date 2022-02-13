@@ -18,7 +18,7 @@ object BuildPlugins {
 }
 
 object AndroidSdk {
-    const val minSdk     = 16
+    const val minSdk     = 21
     const val compileSdk = 31
     const val targetSdk  = compileSdk
 }
@@ -35,6 +35,10 @@ object Libraries {
         const val room              = "2.4.1"
         const val retrofit          = "2.9.0"
         const val material          = "1.6.0-alpha02"
+        const val compose_activity  = "1.3.1"
+        const val compose_material  = "1.1.0-rc03"
+        const val compose_view_model= "1.0.0-alpha07"
+        const val compose_nav       = "2.4.1"
     }
 
     const val kotlinStdLib          = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -54,6 +58,21 @@ object Libraries {
     const val retrofit              = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
     const val retrofitGson          = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
     const val material              = "com.google.android.material:material:${Versions.material}"
+    // Integration with activities
+    const val composeActivity       = "androidx.activity:activity-compose:${Versions.compose_activity}"
+    // Compose Material Design
+    const val composeMaterial       = "androidx.compose.material:material:${Versions.compose_material}"
+    // Animations
+    const val composeAnimation      = "androidx.compose.animation:animation:${Versions.compose_material}"
+    // Tooling support (Previews, etc.)
+    const val composeUi             = "androidx.compose.ui:ui-tooling:${Versions.compose_material}"
+    const val composeRuntime             = "androidx.compose.runtime:runtime:${Versions.compose_material}"
+    const val composeRuntimeLivedata             = "androidx.compose.runtime:runtime-livedata:${Versions.compose_material}"
+    // Integration with ViewModels
+    const val composeViewmodel      = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}"
+
+    const val composeNavigation     = "androidx.navigation:navigation-compose:${Versions.compose_nav}"
+//    const val composeIcons          = "androidx.compose.material:material-icons-extended:${Versions.compose_material}"
 }
 
 object TestLibraries {
