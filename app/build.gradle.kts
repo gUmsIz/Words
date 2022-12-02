@@ -13,8 +13,8 @@ android {
         applicationId = "com.gumsiz.words"
         minSdk = AndroidSdk.minSdk
         targetSdk = AndroidSdk.targetSdk
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "1.2"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
