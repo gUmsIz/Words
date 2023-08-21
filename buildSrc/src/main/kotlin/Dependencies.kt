@@ -1,10 +1,11 @@
 const val kotlinVersion = "1.6.10"
-const val navigationVersion = "2.5.0-alpha01"
+const val navigationVersion = "2.5.0"
 
 object BuildPlugins {
 
     object Versions {
-        const val buildToolsVersion = "7.1.0"
+        const val buildToolsVersion = "8.1.0"
+        const val composeCompilerVersin = "1.2.0-beta01"
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
@@ -19,7 +20,7 @@ object BuildPlugins {
 
 object AndroidSdk {
     const val minSdk     = 21
-    const val compileSdk = 31
+    const val compileSdk = 33
     const val targetSdk  = compileSdk
 }
 
@@ -38,7 +39,7 @@ object Libraries {
         const val compose_activity  = "1.3.1"
         const val compose_material  = "1.1.0-rc03"
         const val compose_view_model= "1.0.0-alpha07"
-        const val compose_nav       = "2.4.1"
+        const val compose_nav       = "2.5.0"
     }
 
     const val kotlinStdLib          = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -66,8 +67,8 @@ object Libraries {
     const val composeAnimation      = "androidx.compose.animation:animation:${Versions.compose_material}"
     // Tooling support (Previews, etc.)
     const val composeUi             = "androidx.compose.ui:ui-tooling:${Versions.compose_material}"
-    const val composeRuntime             = "androidx.compose.runtime:runtime:${Versions.compose_material}"
-    const val composeRuntimeLivedata             = "androidx.compose.runtime:runtime-livedata:${Versions.compose_material}"
+    const val composeRuntime        = "androidx.compose.runtime:runtime:${Versions.compose_material}"
+    const val composeRuntimeLivedata= "androidx.compose.runtime:runtime-livedata:${Versions.compose_material}"
     // Integration with ViewModels
     const val composeViewmodel      = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}"
 

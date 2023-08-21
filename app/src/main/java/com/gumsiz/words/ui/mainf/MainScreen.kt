@@ -127,10 +127,12 @@ fun MainScreen(navController: NavController) {
                         )
                         when (state) {
                             0 -> {
-                                data?.let { list -> VerbList(list, navController) }
+                                data?.let { list ->
+                                    VerbList(list, navController, mainViewModel::searchInList)
+                                }
                             }
                             1 -> {
-                                favData?.let { favList -> FavoriteList(favList, navController) }
+                                favData?.let { favList -> FavoriteList(favList, navController, mainViewModel::searchInFavList) }
                             }
                         }
                     }
@@ -164,7 +166,8 @@ fun MainScreen(navController: NavController) {
 }
 
 @Composable
-fun FavoriteList(data: List<Word>, navController: NavController) {
+fun FavoriteList(data: List<Word>, navController: NavController, updateList: (String)-> Unit) {
+    val searchText = remember { mutableStateOf("") }
     Column(
         Modifier
             .fillMaxSize()
@@ -176,9 +179,12 @@ fun FavoriteList(data: List<Word>, navController: NavController) {
                 .fillMaxWidth()
                 .border(1.dp, Color.Gray, MaterialTheme.shapes.medium.copy(CornerSize(16.dp)))
                 .align(alignment = Alignment.CenterHorizontally),
-            value = "",
+            value = searchText.value,
             shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
-            onValueChange = {},
+            onValueChange = {
+                updateList(it)
+                searchText.value = it
+            } ,
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
@@ -200,7 +206,8 @@ fun FavoriteList(data: List<Word>, navController: NavController) {
 }
 
 @Composable
-fun VerbList(data: List<Word>, navController: NavController) {
+fun VerbList(data: List<Word>, navController: NavController, updateList: (String)-> Unit) {
+    val searchText = remember { mutableStateOf("") }
     Column(
         Modifier
             .fillMaxSize()
@@ -212,9 +219,12 @@ fun VerbList(data: List<Word>, navController: NavController) {
                 .fillMaxWidth()
                 .border(1.dp, Color.Gray, MaterialTheme.shapes.medium.copy(CornerSize(16.dp)))
                 .align(alignment = Alignment.CenterHorizontally),
-            value = "",
+            value = searchText.value,
             shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
-            onValueChange = {},
+            onValueChange = {
+                updateList(it)
+                searchText.value = it
+            },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,

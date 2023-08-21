@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.liveData
 import com.gumsiz.words.R
 import com.gumsiz.words.data.Word
@@ -29,10 +30,12 @@ class MainViewModel(database: WordsDAO, application: Application) :
 
 
     //List of words from db
-    //private var _data = repository.wordlist as MutableLiveData<List<Word>>
+    private var _data = repository.wordList as MutableLiveData<List<Word>>
+    private var _favData = repository.wordListFav as MutableLiveData<List<Word>>
+    private var totalList: List<Word>? = null
 
-    val data: LiveData<List<Word>> = repository.wordList
-    val favoritedata: LiveData<List<Word>> = repository.wordListFav
+    val data: LiveData<List<Word>> = _data
+    val favoritedata: LiveData<List<Word>> = _favData
     //get() = _data
 
     init {
@@ -47,6 +50,27 @@ class MainViewModel(database: WordsDAO, application: Application) :
     fun update() {
         sData.edit().putBoolean("dataLoaded", false).apply()
         prepare()
+    }
+
+    fun searchInList(text: String){
+        if (totalList == null) totalList = data.value
+        if (text.isEmpty()) {
+            _data.value = totalList
+        } else {
+            _data.value = totalList?.filter {
+                it.name.contains(text, true)
+            }
+        }
+    }
+    fun searchInFavList(text: String){
+        val favList = data.value?.filter { it.favorite }
+        if (text.isEmpty()) {
+            _favData.value = favList
+        } else {
+            _favData.value = favList?.filter {
+                it.name.contains(text, true)
+            }
+        }
     }
 
 

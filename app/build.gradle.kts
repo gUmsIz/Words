@@ -46,8 +46,9 @@ android {
         jvmTarget = "1.8"
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.2.0-alpha02"
+        kotlinCompilerExtensionVersion = BuildPlugins.Versions.composeCompilerVersin
     }
+    namespace = "com.gumsiz.words"
 }
 
 dependencies {
