@@ -88,5 +88,6 @@ dependencies {
     implementation(Libraries.composeRuntime)
     implementation(Libraries.composeRuntimeLivedata)
     implementation(Libraries.composeNavigation)
+    implementation(project(":shared"))
 //    implementation(Libraries.composeIcons)
 }
