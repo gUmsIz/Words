@@ -1,11 +1,12 @@
-const val kotlinVersion = "1.6.10"
+const val kotlinVersion = "1.9.10"
 const val navigationVersion = "2.5.0"
+const val realmKotlinVersion = "1.11.0"
 
 object BuildPlugins {
 
     object Versions {
-        const val buildToolsVersion = "8.1.0"
-        const val composeCompilerVersin = "1.2.0-beta01"
+        const val buildToolsVersion = "8.1.2"
+        const val composeCompilerVersin = "1.5.3"
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
@@ -15,12 +16,16 @@ object BuildPlugins {
     const val kotlinAndroid = "kotlin-android"
     const val kotlinKapt = "kotlin-kapt"
     const val kotlinNavigationSafeargs = "androidx.navigation.safeargs.kotlin"
+    const val androidLibrary = "com.android.library"
+    const val multiplatform = "multiplatform"
+    const val serialization = "plugin.serialization"
+    const val realm = "io.realm.kotlin"
 
 }
 
 object AndroidSdk {
     const val minSdk     = 21
-    const val compileSdk = 33
+    const val compileSdk = 34
     const val targetSdk  = compileSdk
 }
 
@@ -31,9 +36,9 @@ object Libraries {
         const val ktx               = "1.7.0"
         const val constraintlayout  = "2.1.3"
         const val legacy_support_v4 = "1.0.0"
-        const val lifecycle         = "2.5.0-alpha01"
+        const val lifecycle         = "2.6.0"
         const val recyclerview      = "1.2.1"
-        const val room              = "2.4.1"
+        const val room              = "2.6.0-rc01"
         const val retrofit          = "2.9.0"
         const val material          = "1.6.0-alpha02"
         const val compose_activity  = "1.3.1"
@@ -42,6 +47,9 @@ object Libraries {
         const val compose_nav       = "2.5.0"
         const val koin              = "3.4.0"
         const val koin_compose      = "3.4.3"
+        const val realm_kotlin_base = "1.11.0"
+        const val coroutine_core    = "1.7.3"
+        const val serialization     = "1.6.0"
     }
 
     const val kotlinStdLib          = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -75,10 +83,13 @@ object Libraries {
     const val composeViewmodel      = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}"
 
     const val composeNavigation     = "androidx.navigation:navigation-compose:${Versions.compose_nav}"
-//    const val composeIcons          = "androidx.compose.material:material-icons-extended:${Versions.compose_material}"
     const val koin_core             = "io.insert-koin:koin-core:${Versions.koin}"
     const val koin_android          = "io.insert-koin:koin-android:${Versions.koin}"
     const val koin_android_compose  = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
+    //KMM Libs
+    const val realm_kotlin_base     = "io.realm.kotlin:library-base:${Versions.realm_kotlin_base}"
+    const val coroutine_core        = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutine_core}"
+    const val serialization         = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}"
 }
 
 object TestLibraries {

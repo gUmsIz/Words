@@ -1,20 +1,13 @@
 plugins {
     kotlin(BuildPlugins.multiplatform)
+    kotlin(BuildPlugins.serialization) version kotlinVersion
     id(BuildPlugins.androidLibrary)
+    id(BuildPlugins.realm) version realmKotlinVersion
 }
 
-//@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
+@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    //targetHierarchy.default()
-
-    /*androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
-        }
-    }*/
-    android()
+    androidTarget()
     
     listOf(
         iosX64(),
@@ -29,14 +22,14 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
-                //put your multiplatform dependencies here
+                implementation(Libraries.realm_kotlin_base)
+                implementation(Libraries.coroutine_core)
+                implementation (Libraries.serialization)
                 api(Libraries.koin_core)
             }
         }
         val commonTest by getting {
             dependencies {
-                //TODO move to Dependencies.kt
-                implementation(kotlin("test"))
             }
         }
     }
