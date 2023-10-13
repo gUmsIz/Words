@@ -40,6 +40,8 @@ object Libraries {
         const val compose_material  = "1.1.0-rc03"
         const val compose_view_model= "1.0.0-alpha07"
         const val compose_nav       = "2.5.0"
+        const val koin              = "3.4.0"
+        const val koin_compose      = "3.4.3"
     }
 
     const val kotlinStdLib          = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -74,6 +76,8 @@ object Libraries {
 
     const val composeNavigation     = "androidx.navigation:navigation-compose:${Versions.compose_nav}"
 //    const val composeIcons          = "androidx.compose.material:material-icons-extended:${Versions.compose_material}"
+    const val koin_core             = "io.insert-koin:koin-core:${Versions.koin}"
+    const val koin_android_compose  = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
 }
 
 object TestLibraries {
