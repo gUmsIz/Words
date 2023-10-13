@@ -1,7 +1,7 @@
 package com.gumsiz.shared.di
 
-import DataBaseImpl
-import Database
+import com.gumsiz.shared.data.db.DataBaseImpl
+import com.gumsiz.shared.data.db.Database
 import com.gumsiz.shared.data.model.WordDatabaseModel
 import io.realm.kotlin.Realm
 import io.realm.kotlin.RealmConfiguration

@@ -1,6 +1,5 @@
 package com.gumsiz.words.ui.mainf
 
-import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -25,25 +24,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.words.R
-import com.gumsiz.words.data.Word
-import com.gumsiz.words.data.db.WordsDatabase
 import com.gumsiz.words.data.utils.Resource
 import com.gumsiz.words.data.utils.Status
 import com.gumsiz.words.ui.Screen
 import com.gumsiz.words.ui.theme.WordsTheme
 import com.gumsiz.words.ui.theme.primaryLightColor
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun MainScreen(navController: NavController) {
-    val mainViewModel: MainViewModel = viewModel(
-        factory = MainViewModelFactory(
-            database = WordsDatabase.getInstance(LocalContext.current).WordsDAO,
-            application = LocalContext.current.applicationContext as Application
-        )
-    )
+    val mainViewModel = koinViewModel<MainViewModel>()
     val openDialog = remember { mutableStateOf(false) }
     Scaffold(
         topBar = {
@@ -67,7 +60,6 @@ fun MainScreen(navController: NavController) {
                         onDismissRequest = { dropdown.value = false }
                     ) {
                         DropdownMenuItem(
-//                            contentPadding = PaddingValues(vertical = 4.dp),
                             onClick = {
                                 dropdown.value = false
                                 openDialog.value = true
@@ -81,8 +73,8 @@ fun MainScreen(navController: NavController) {
         },
         content = {
             var state by remember { mutableStateOf(0) }
-            val data by mainViewModel.data.observeAsState()
-            val favData by mainViewModel.favoritedata.observeAsState()
+            val newData: List<WordModel?> by mainViewModel.newData.collectAsState(initial = emptyList())
+            val newFavData: List<WordModel?> by mainViewModel.newFavData.collectAsState(initial = emptyList())
             val prepare by mainViewModel.prepare()
                 .observeAsState(Resource(status = Status.LOADING, message = null))
             val titles = listOf(
@@ -97,7 +89,6 @@ fun MainScreen(navController: NavController) {
                 if (openDialog.value) InfoDialog { openDialog.value = false }
                 when (prepare.status) {
                     Status.SUCCESS -> {
-
                         TabRow(
                             selectedTabIndex = state,
                             tabs = {
@@ -109,6 +100,7 @@ fun MainScreen(navController: NavController) {
                                                 selected = state == index,
                                                 onClick = { state = index })
                                         }
+
                                         else -> {
                                             Tab(
                                                 icon = {
@@ -127,20 +119,32 @@ fun MainScreen(navController: NavController) {
                         )
                         when (state) {
                             0 -> {
-                                data?.let { list ->
-                                    VerbList(list, navController, mainViewModel::searchInList)
-                                }
+                                VerbList(
+                                    newData,
+                                    navController,
+                                    mainViewModel::searchInList,
+                                    mainViewModel
+                                )
                             }
+
                             1 -> {
-                                favData?.let { favList -> FavoriteList(favList, navController, mainViewModel::searchInFavList) }
+                                FavoriteList(
+                                    newFavData,
+                                    navController,
+                                    mainViewModel::searchInFavList,
+                                    mainViewModel
+                                )
                             }
                         }
                     }
+
                     Status.ERROR -> {
                         Text(text = "Ups")
                     }
+
                     Status.LOADING -> {
                         Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 16.dp)
@@ -166,8 +170,13 @@ fun MainScreen(navController: NavController) {
 }
 
 @Composable
-fun FavoriteList(data: List<Word>, navController: NavController, updateList: (String)-> Unit) {
-    val searchText = remember { mutableStateOf("") }
+fun FavoriteList(
+    data: List<WordModel?>,
+    navController: NavController,
+    updateList: (String) -> Unit,
+    mainViewModel: MainViewModel
+) {
+    val searchText by mainViewModel.searchQueryInFavorite.collectAsState()
     Column(
         Modifier
             .fillMaxSize()
@@ -179,51 +188,10 @@ fun FavoriteList(data: List<Word>, navController: NavController, updateList: (St
                 .fillMaxWidth()
                 .border(1.dp, Color.Gray, MaterialTheme.shapes.medium.copy(CornerSize(16.dp)))
                 .align(alignment = Alignment.CenterHorizontally),
-            value = searchText.value,
+            value = searchText,
             shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
             onValueChange = {
                 updateList(it)
-                searchText.value = it
-            } ,
-            colors = TextFieldDefaults.textFieldColors(
-                focusedIndicatorColor = Color.Transparent,
-                unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = primaryLightColor
-            ),
-            label = { Text(text = "Geben Sie ein Wort ein") }
-        )
-        Card(
-            modifier = Modifier
-                .padding(bottom = 4.dp)
-                .fillMaxSize(),
-            shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
-            backgroundColor = primaryLightColor,
-            border = BorderStroke(1.dp, Color.Gray)
-        ) {
-            VerbItemList(data = data, navController)
-        }
-    }
-}
-
-@Composable
-fun VerbList(data: List<Word>, navController: NavController, updateList: (String)-> Unit) {
-    val searchText = remember { mutableStateOf("") }
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(horizontal = 8.dp),
-    ) {
-        TextField(
-            modifier = Modifier
-                .padding(vertical = 4.dp)
-                .fillMaxWidth()
-                .border(1.dp, Color.Gray, MaterialTheme.shapes.medium.copy(CornerSize(16.dp)))
-                .align(alignment = Alignment.CenterHorizontally),
-            value = searchText.value,
-            shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
-            onValueChange = {
-                updateList(it)
-                searchText.value = it
             },
             colors = TextFieldDefaults.textFieldColors(
                 focusedIndicatorColor = Color.Transparent,
@@ -246,15 +214,59 @@ fun VerbList(data: List<Word>, navController: NavController, updateList: (String
 }
 
 @Composable
-fun VerbItemList(data: List<Word>, navController: NavController) {
+fun VerbList(
+    data: List<WordModel?>,
+    navController: NavController,
+    updateList: (String) -> Unit,
+    mainViewModel: MainViewModel
+) {
+    val searchText by mainViewModel.searchQuery.collectAsState()
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(horizontal = 8.dp),
+    ) {
+        TextField(
+            modifier = Modifier
+                .padding(vertical = 4.dp)
+                .fillMaxWidth()
+                .border(1.dp, Color.Gray, MaterialTheme.shapes.medium.copy(CornerSize(16.dp)))
+                .align(alignment = Alignment.CenterHorizontally),
+            value = searchText,
+            shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
+            onValueChange = {
+                updateList(it)
+            },
+            colors = TextFieldDefaults.textFieldColors(
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent,
+                backgroundColor = primaryLightColor
+            ),
+            label = { Text(text = "Geben Sie ein Wort ein") }
+        )
+        Card(
+            modifier = Modifier
+                .padding(bottom = 4.dp)
+                .fillMaxSize(),
+            shape = MaterialTheme.shapes.medium.copy(all = CornerSize(16.dp)),
+            backgroundColor = primaryLightColor,
+            border = BorderStroke(1.dp, Color.Gray)
+        ) {
+            VerbItemList(data = data, navController)
+        }
+    }
+}
+
+@Composable
+fun VerbItemList(data: List<WordModel?>, navController: NavController) {
     LazyColumn(
         Modifier.padding(8.dp)
     ) {
         items(data) {
             Text(
-                text = it.name,
+                text = it?.name ?: "",
                 Modifier.clickable {
-                    navController.navigate(Screen.DetailScreen.route + "/${it.name}")
+                    navController.navigate(Screen.DetailScreen.route + "/${it?.name}")
                 }
             )
         }
@@ -295,5 +307,25 @@ fun InfoDialog(dismiss: () -> Unit) {
 fun MainScreenPreview() {
     WordsTheme {
 //        MainScreen()
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp)
+        ) {
+            Card(backgroundColor = MaterialTheme.colors.secondary) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.load_message),
+                        Modifier.padding(8.dp)
+                    )
+                    CircularProgressIndicator(Modifier.padding(vertical = 8.dp))
+                }
+            }
+        }
     }
 }

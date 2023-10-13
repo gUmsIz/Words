@@ -2,49 +2,56 @@ package com.gumsiz.words.ui.mainf
 
 import android.app.Application
 import android.content.Context
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
+import androidx.lifecycle.viewModelScope
 import com.gumsiz.words.R
-import com.gumsiz.words.data.Word
 import com.gumsiz.words.data.WordRepository
-import com.gumsiz.words.data.db.WordsDAO
 import com.gumsiz.words.data.utils.Resource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
 import java.lang.Exception
 
-class MainViewModel(database: WordsDAO, application: Application) :
-    AndroidViewModel(application) {
-    //CoroutineJOB
-    private var viewModelJob = Job()
+//TODO get rid of livedata
+//TODO refactor sharedpref to a manager
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+class MainViewModel(application: Application, private val repository: WordRepository) :
+    ViewModel() {
 
-    val msg = application.getString(R.string.load_message)
-
-    // Coroutine Scope
-    private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    val repository = WordRepository(database, application)
+    private val msg = application.getString(R.string.load_message)
 
     val sData = application.getSharedPreferences("data", Context.MODE_PRIVATE)
 
 
     //List of words from db
-    private var _data = repository.wordList as MutableLiveData<List<Word>>
-    private var _favData = repository.wordListFav as MutableLiveData<List<Word>>
-    private var totalList: List<Word>? = null
+    private var _newData = repository.newDataBase.verbList
+    private var _newFavData = repository.newDataBase.verbListFavorite
 
-    val data: LiveData<List<Word>> = _data
-    val favoritedata: LiveData<List<Word>> = _favData
+    val searchQuery = MutableStateFlow("")
+    val searchQueryInFavorite = MutableStateFlow("")
+    val newData = searchQuery.debounce(250).flatMapLatest { searchQuery ->
+        _newData.mapLatest { verbList ->
+            verbList.filter {
+                it!!.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val newFavData = searchQueryInFavorite.debounce(250).flatMapLatest { searchQuery ->
+        _newFavData.mapLatest { favoriteVerbList ->
+            favoriteVerbList.filter {
+                it!!.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
     //get() = _data
 
     init {
         prepare()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
     }
 
     fun update() {
@@ -52,25 +59,12 @@ class MainViewModel(database: WordsDAO, application: Application) :
         prepare()
     }
 
-    fun searchInList(text: String){
-        if (totalList == null) totalList = data.value
-        if (text.isEmpty()) {
-            _data.value = totalList
-        } else {
-            _data.value = totalList?.filter {
-                it.name.contains(text, true)
-            }
-        }
+    fun searchInList(text: String) {
+        searchQuery.value = text
     }
-    fun searchInFavList(text: String){
-        val favList = data.value?.filter { it.favorite }
-        if (text.isEmpty()) {
-            _favData.value = favList
-        } else {
-            _favData.value = favList?.filter {
-                it.name.contains(text, true)
-            }
-        }
+
+    fun searchInFavList(text: String) {
+        searchQueryInFavorite.value = text
     }
 
 
@@ -79,8 +73,8 @@ class MainViewModel(database: WordsDAO, application: Application) :
             emit(Resource.loading(data = null, message = msg))
             try {
                 // From Api activate this method instead of MockData
-                //repository.getDataFromServer()
-                repository.getDataFromMockServer()
+                repository.getDataFromServer()
+                //repository.getDataFromMockServer()
                 sData.edit().putBoolean("dataLoaded", true).apply()
                 emit(Resource.success(data = null))
 

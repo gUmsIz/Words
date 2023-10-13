@@ -1,7 +1,7 @@
 package com.gumsiz.words.data.network
 
 import com.google.gson.Gson
-import com.gumsiz.words.data.db.WordDB
+import com.gumsiz.shared.data.model.WordDatabaseModel
 
 
 data class WordN(
@@ -16,10 +16,10 @@ data class WordN(
     val beispiel: Array<String?>?
 )
 
-fun List<WordN>.toDbData(): Array<WordDB> {
+fun List<WordN>.toNewDBData(): List<WordDatabaseModel>{
     val gson = Gson()
     return map {
-        WordDB(
+        WordDatabaseModel(
             it.name,
             gson.toJson(mutableListOf<String>()),
             it.cekim_1,
@@ -32,5 +32,5 @@ fun List<WordN>.toDbData(): Array<WordDB> {
             gson.toJson(it.beispiel),
             false
         )
-    }.toTypedArray()
+    }
 }

@@ -1,6 +1,5 @@
 package com.gumsiz.words.ui.detayf
 
-import android.app.Application
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -18,6 +17,7 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.twotone.Favorite
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -25,28 +25,18 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.gumsiz.words.data.Word
-import com.gumsiz.words.data.db.WordDB
-import com.gumsiz.words.data.db.WordsDatabase
-import com.gumsiz.words.data.db.toWord
-import com.gumsiz.words.data.toWordDB
+import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.words.ui.theme.WordsTheme
+import org.koin.androidx.compose.koinViewModel
 import java.util.*
 
 @Composable
 fun DetailScreen(wordId: String = "") {
-    val viewModel: DetayViewModel = viewModel(
-        factory = DetayViewModelFactory(
-            database = WordsDatabase.getInstance(LocalContext.current).WordsDAO,
-            application = LocalContext.current.applicationContext as Application
-        )
-    )
-    val wordDB by viewModel.getWord(wordId).observeAsState()
+    val viewModel = koinViewModel<DetailViewModel>()
     val favorite by viewModel.favUpdate.observeAsState()
+    val wordDB by viewModel.getVerb(wordId).collectAsState()
 
     Scaffold(
         topBar = {
@@ -90,9 +80,9 @@ fun DetailScreen(wordId: String = "") {
             ) {
                 val openDialog = remember { mutableStateOf(false) }
                 wordDB?.let {
-                    val word = it.toWord()
+                    val word = it
                     Text(
-                        text = word.name.toUpperCase(Locale.getDefault()),
+                        text = word.name.uppercase(Locale.getDefault()),
                         style = MaterialTheme.typography.h5
                     )
                     DetailBox("Übersetzung", true, openDialog = { openDialog.value = true }) {
@@ -163,7 +153,7 @@ fun DetailBox(
 }
 
 @Composable
-fun Translate(word: Word) {
+fun Translate(word: WordModel) {
     Column {
         for (i in word.translation) {
             val text = "- " + Html.fromHtml(i)
@@ -173,14 +163,14 @@ fun Translate(word: Word) {
 }
 
 @Composable
-fun Conjugation(word: Word) {
+fun Conjugation(word: WordModel) {
     Column(modifier = Modifier) {
         if (word.firstSg!!.trim().isNotEmpty()) {
             val ss = SpannableStringBuilder("Ich ")
             ss.append(word.firstSg)
             ss.setSpan(
                 UnderlineSpan(),
-                ss.length - word.firstSg.length,
+                ss.length - word.firstSg!!.length,
                 ss.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
@@ -191,7 +181,7 @@ fun Conjugation(word: Word) {
             ss.append(word.secondSg)
             ss.setSpan(
                 UnderlineSpan(),
-                ss.length - word.secondSg.length,
+                ss.length - word.secondSg!!.length,
                 ss.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
@@ -209,7 +199,7 @@ fun Conjugation(word: Word) {
             ss.append(word.pret)
             ss.setSpan(
                 UnderlineSpan(),
-                ss.length - word.pret.length,
+                ss.length - word.pret!!.length,
                 ss.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
@@ -221,7 +211,7 @@ fun Conjugation(word: Word) {
             ss.append(word.perfSg)
             ss.setSpan(
                 UnderlineSpan(),
-                ss.length - word.perfSg.length,
+                ss.length - word.perfSg!!.length,
                 ss.length,
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
             )
@@ -239,7 +229,7 @@ fun Conjugation(word: Word) {
 }
 
 @Composable
-fun Structure(word: Word) {
+fun Structure(word: WordModel) {
     Column {
         for (i in word.structure!!) {
             val text = "- " + Html.fromHtml(i)
@@ -249,14 +239,14 @@ fun Structure(word: Word) {
 }
 
 @Composable
-fun Examples(word: Word) {
+fun Examples(word: WordModel) {
     Column {
         for (i in word.sampleSentence!!) {
             var text = ""
             val text1 = ""
             if (i!!.trim().isNotEmpty()) {
                 val wordSample = i.trim().replace("&#8211;", " - ", false)
-                text = "* " + wordSample
+                text = "* $wordSample"
                 Text(text = text)
                 Text(text = text1)
             }
@@ -265,7 +255,11 @@ fun Examples(word: Word) {
 }
 
 @Composable
-fun TranslateAddDialog(word: Word, updateData: (wordDB: WordDB) -> Unit, dismiss: () -> Unit) {
+fun TranslateAddDialog(
+    word: WordModel,
+    updateData: (wordDB: WordModel) -> Unit,
+    dismiss: () -> Unit
+) {
     val newTranslation = remember {
         mutableStateOf("")
     }
@@ -285,7 +279,7 @@ fun TranslateAddDialog(word: Word, updateData: (wordDB: WordDB) -> Unit, dismiss
                             Text(text = "$translation")
                             IconButton(onClick = {
                                 word.translation.remove(translation)
-                                updateData(word.toWordDB())
+                                updateData(word)
                             }) {
                                 Icon(
                                     imageVector = Icons.Default.Delete,
@@ -310,7 +304,7 @@ fun TranslateAddDialog(word: Word, updateData: (wordDB: WordDB) -> Unit, dismiss
                 TextButton(onClick = {
                     if (newTranslation.value.isNotBlank()) {
                         word.translation.add(newTranslation.value)
-                        updateData(word.toWordDB())
+                        updateData(word)
                         dismiss()
                     }
                 }) {
