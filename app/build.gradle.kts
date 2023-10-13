@@ -90,5 +90,6 @@ dependencies {
     implementation(Libraries.composeNavigation)
     implementation(project(":shared"))
     implementation(Libraries.koin_android_compose)
+    implementation(Libraries.koin_android)
 //    implementation(Libraries.composeIcons)
 }

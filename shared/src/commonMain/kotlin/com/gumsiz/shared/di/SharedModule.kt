@@ -1,10 +1,16 @@
 package com.gumsiz.shared.di
 
-import com.gumsiz.shared.data.DataBase
-import org.koin.core.module.dsl.bind
-import org.koin.core.module.dsl.singleOf
+import DataBaseImpl
+import Database
+import com.gumsiz.shared.data.model.WordDatabaseModel
+import io.realm.kotlin.Realm
+import io.realm.kotlin.RealmConfiguration
 import org.koin.dsl.module
 
 fun sharedModule() = module {
-    singleOf(::DataBase) { bind() }
+    single {
+        val config = RealmConfiguration.create(schema = setOf(WordDatabaseModel::class))
+        Realm.open(config)
+    }
+    single<Database> { DataBaseImpl(get()) }
 }

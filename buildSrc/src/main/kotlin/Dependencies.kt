@@ -77,6 +77,7 @@ object Libraries {
     const val composeNavigation     = "androidx.navigation:navigation-compose:${Versions.compose_nav}"
 //    const val composeIcons          = "androidx.compose.material:material-icons-extended:${Versions.compose_material}"
     const val koin_core             = "io.insert-koin:koin-core:${Versions.koin}"
+    const val koin_android          = "io.insert-koin:koin-android:${Versions.koin}"
     const val koin_android_compose  = "io.insert-koin:koin-androidx-compose:${Versions.koin}"
 }
 
