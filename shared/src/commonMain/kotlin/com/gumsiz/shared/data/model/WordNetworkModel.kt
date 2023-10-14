@@ -1,10 +1,11 @@
-package com.gumsiz.words.data.network
+package com.gumsiz.shared.data.model
 
-import com.google.gson.Gson
-import com.gumsiz.shared.data.model.WordDatabaseModel
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-
-data class WordN(
+@Serializable
+data class WordNetworkModel(
     val name: String,
     val cekim_1: String?,
     val cekim_2: String?,
@@ -16,20 +17,19 @@ data class WordN(
     val beispiel: Array<String?>?
 )
 
-fun List<WordN>.toNewDBData(): List<WordDatabaseModel>{
-    val gson = Gson()
+fun List<WordNetworkModel>.toDBData(): List<WordDatabaseModel>{
     return map {
         WordDatabaseModel(
             it.name,
-            gson.toJson(mutableListOf<String>()),
+            Json.encodeToString(mutableListOf<String>()),
             it.cekim_1,
             it.cekim_2,
             it.imp,
             it.pret,
             it.perf,
             it.konj,
-            gson.toJson(it.struktur),
-            gson.toJson(it.beispiel),
+            Json.encodeToString(it.struktur),
+            Json.encodeToString(it.beispiel),
             false
         )
     }

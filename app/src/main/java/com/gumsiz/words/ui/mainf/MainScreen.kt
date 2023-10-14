@@ -14,7 +14,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -27,8 +26,7 @@ import androidx.core.content.ContextCompat.startActivity
 import androidx.navigation.NavController
 import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.words.R
-import com.gumsiz.words.data.utils.Resource
-import com.gumsiz.words.data.utils.Status
+import com.gumsiz.words.utils.Status
 import com.gumsiz.words.ui.Screen
 import com.gumsiz.words.ui.theme.WordsTheme
 import com.gumsiz.words.ui.theme.primaryLightColor
@@ -73,10 +71,9 @@ fun MainScreen(navController: NavController) {
         },
         content = {
             var state by remember { mutableStateOf(0) }
-            val newData: List<WordModel?> by mainViewModel.newData.collectAsState(initial = emptyList())
-            val newFavData: List<WordModel?> by mainViewModel.newFavData.collectAsState(initial = emptyList())
-            val prepare by mainViewModel.prepare()
-                .observeAsState(Resource(status = Status.LOADING, message = null))
+            val newData: List<WordModel?> by mainViewModel.allVerbsList.collectAsState(initial = emptyList())
+            val newFavData: List<WordModel?> by mainViewModel.favoriteVerbsList.collectAsState(initial = emptyList())
+            val verbData by mainViewModel.dataStateFlow.collectAsState()
             val titles = listOf(
                 "Verben",
                 Icons.Default.Favorite
@@ -87,7 +84,7 @@ fun MainScreen(navController: NavController) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 if (openDialog.value) InfoDialog { openDialog.value = false }
-                when (prepare.status) {
+                when (verbData.status) {
                     Status.SUCCESS -> {
                         TabRow(
                             selectedTabIndex = state,

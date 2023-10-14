@@ -38,8 +38,6 @@ object Libraries {
         const val legacy_support_v4 = "1.0.0"
         const val lifecycle         = "2.6.0"
         const val recyclerview      = "1.2.1"
-        const val room              = "2.6.0-rc01"
-        const val retrofit          = "2.9.0"
         const val material          = "1.6.0-alpha02"
         const val compose_activity  = "1.3.1"
         const val compose_material  = "1.1.0-rc03"
@@ -50,6 +48,7 @@ object Libraries {
         const val realm_kotlin_base = "1.11.0"
         const val coroutine_core    = "1.7.3"
         const val serialization     = "1.6.0"
+        const val ktor              = "2.3.5"
     }
 
     const val kotlinStdLib          = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
@@ -63,11 +62,6 @@ object Libraries {
     const val recyclerView          = "androidx.recyclerview:recyclerview:${Versions.recyclerview}"
     const val navigationFragment    = "androidx.navigation:navigation-fragment-ktx:${navigationVersion}"
     const val navigationUi          = "androidx.navigation:navigation-ui-ktx:${navigationVersion}"
-    const val roomRuntime           = "androidx.room:room-runtime:${Versions.room}"
-    const val roomKtx               = "androidx.room:room-ktx:${Versions.room}"
-    const val roomCompiler          = "androidx.room:room-compiler:${Versions.room}"
-    const val retrofit              = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
-    const val retrofitGson          = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
     const val material              = "com.google.android.material:material:${Versions.material}"
     // Integration with activities
     const val composeActivity       = "androidx.activity:activity-compose:${Versions.compose_activity}"
@@ -90,6 +84,10 @@ object Libraries {
     const val realm_kotlin_base     = "io.realm.kotlin:library-base:${Versions.realm_kotlin_base}"
     const val coroutine_core        = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.coroutine_core}"
     const val serialization         = "org.jetbrains.kotlinx:kotlinx-serialization-json:${Versions.serialization}"
+    const val ktor_client_core      = "io.ktor:ktor-client-core:${Versions.ktor}"
+    const val ktor_client_cont      = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
+    const val ktor_client_json      = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
+    const val ktor_client_android   = "io.ktor:ktor-client-okhttp:${Versions.ktor}"
 }
 
 object TestLibraries {

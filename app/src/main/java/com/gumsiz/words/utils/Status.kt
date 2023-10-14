@@ -1,4 +1,4 @@
-package com.gumsiz.words.data.utils
+package com.gumsiz.words.utils
 
 enum class Status {
     SUCCESS,

@@ -22,10 +22,18 @@ kotlin {
     sourceSets {
         val commonMain by getting {
             dependencies {
+                implementation(Libraries.ktor_client_core)
+                implementation(Libraries.ktor_client_cont)
+                implementation(Libraries.ktor_client_json)
                 implementation(Libraries.realm_kotlin_base)
                 implementation(Libraries.coroutine_core)
                 implementation (Libraries.serialization)
                 api(Libraries.koin_core)
+            }
+        }
+        val androidMain by getting {
+            dependencies {
+                implementation(Libraries.ktor_client_android)
             }
         }
         val commonTest by getting {

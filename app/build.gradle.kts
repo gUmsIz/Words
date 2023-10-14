@@ -5,6 +5,7 @@ plugins {
     id(BuildPlugins.kotlinNavigationSafeargs)
 }
 
+//TODO clean old dependencies
 
 android {
     compileSdk = AndroidSdk.compileSdk
@@ -69,14 +70,6 @@ dependencies {
 
     implementation(Libraries.navigationFragment)
     implementation(Libraries.navigationUi)
-
-    implementation(Libraries.roomRuntime)
-    implementation(Libraries.roomKtx)
-    kapt(Libraries.roomCompiler)
-
-    // Retrofit for downloading data
-    implementation(Libraries.retrofit)
-    implementation(Libraries.retrofitGson)
 
     implementation(Libraries.material)
 

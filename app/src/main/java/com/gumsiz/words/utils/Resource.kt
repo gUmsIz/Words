@@ -1,4 +1,4 @@
-package com.gumsiz.words.data.utils
+package com.gumsiz.words.utils
 
 
 data class Resource<out T>(val status: Status, val message: String?) {

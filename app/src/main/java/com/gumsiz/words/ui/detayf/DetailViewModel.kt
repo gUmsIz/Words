@@ -3,8 +3,8 @@ package com.gumsiz.words.ui.detayf
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.gumsiz.shared.data.Repository
 import com.gumsiz.shared.data.model.WordModel
-import com.gumsiz.words.data.WordRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -15,10 +15,9 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class DetailViewModel(
-     repository: WordRepository
+    private val wordRepository: Repository
 ) : ViewModel() {
 
-    val newDataBase = repository.newDataBase
 
     //CoroutineJOB
     private var viewModelJob = Job()
@@ -29,12 +28,12 @@ class DetailViewModel(
 
     fun doAction(wordDB: WordModel) {
         scope.launch {
-            newDataBase.update(wordDB.name)
+            wordRepository.updateFavoriteStateInDB(wordDB.name)
         }
     }
 
     fun getVerb(key: String): StateFlow<WordModel?> = flow {
-        emit(newDataBase.getVerb(key))
+        emit(wordRepository.getWordFromDB(key))
     }.stateIn(scope, SharingStarted.Eagerly, null)
 
 
@@ -46,7 +45,7 @@ class DetailViewModel(
         scope.launch {
             //database.update(wordDB)
             if (wordDB.favorite) _favUpdate.value = 1 else _favUpdate.value = 2
-            newDataBase.update(wordDB.name)
+            wordRepository.updateFavoriteStateInDB(wordDB.name)
         }
     }
 
