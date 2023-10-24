@@ -88,6 +88,7 @@ object Libraries {
     const val ktor_client_cont      = "io.ktor:ktor-client-content-negotiation:${Versions.ktor}"
     const val ktor_client_json      = "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}"
     const val ktor_client_android   = "io.ktor:ktor-client-okhttp:${Versions.ktor}"
+    const val ktor_client_native    = "io.ktor:ktor-client-darwin:${Versions.ktor}"
 }
 
 object TestLibraries {
