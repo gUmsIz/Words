@@ -1,5 +1,6 @@
 package com.gumsiz.words.ui.mainf
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import androidx.compose.foundation.BorderStroke
@@ -32,6 +33,7 @@ import com.gumsiz.words.ui.theme.WordsTheme
 import com.gumsiz.words.ui.theme.primaryLightColor
 import org.koin.androidx.compose.koinViewModel
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen(navController: NavController) {
     val mainViewModel = koinViewModel<MainViewModel>()

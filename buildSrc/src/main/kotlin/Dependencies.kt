@@ -13,7 +13,7 @@ object BuildPlugins {
     const val kotlinGradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
     const val navigationGradlePlugin = "androidx.navigation:navigation-safe-args-gradle-plugin:$navigationVersion"
     const val androidApplication = "com.android.application"
-    const val kotlinAndroid = "kotlin-android"
+    const val kotlinAndroid = "android"
     const val kotlinKapt = "kotlin-kapt"
     const val kotlinNavigationSafeargs = "androidx.navigation.safeargs.kotlin"
     const val androidLibrary = "com.android.library"
@@ -39,8 +39,8 @@ object Libraries {
         const val lifecycle         = "2.6.0"
         const val recyclerview      = "1.2.1"
         const val material          = "1.6.0-alpha02"
-        const val compose_activity  = "1.3.1"
-        const val compose_material  = "1.1.0-rc03"
+        const val compose_activity  = "1.8.0"
+        const val compose           = "1.5.4"
         const val compose_view_model= "1.0.0-alpha07"
         const val compose_nav       = "2.5.0"
         const val koin              = "3.4.0"
@@ -66,13 +66,15 @@ object Libraries {
     // Integration with activities
     const val composeActivity       = "androidx.activity:activity-compose:${Versions.compose_activity}"
     // Compose Material Design
-    const val composeMaterial       = "androidx.compose.material:material:${Versions.compose_material}"
+    const val composeMaterial       = "androidx.compose.material:material:${Versions.compose}"
     // Animations
-    const val composeAnimation      = "androidx.compose.animation:animation:${Versions.compose_material}"
+    const val composeAnimation      = "androidx.compose.animation:animation:${Versions.compose}"
     // Tooling support (Previews, etc.)
-    const val composeUi             = "androidx.compose.ui:ui-tooling:${Versions.compose_material}"
-    const val composeRuntime        = "androidx.compose.runtime:runtime:${Versions.compose_material}"
-    const val composeRuntimeLivedata= "androidx.compose.runtime:runtime-livedata:${Versions.compose_material}"
+    const val composeUi             = "androidx.compose.ui:ui:${Versions.compose}"
+    const val composeUiTooling      = "androidx.compose.ui:ui-tooling:${Versions.compose}"
+    const val composeUiToolingPrev  = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
+    const val composeRuntime        = "androidx.compose.runtime:runtime:${Versions.compose}"
+    const val composeRuntimeLivedata= "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
     // Integration with ViewModels
     const val composeViewmodel      = "androidx.lifecycle:lifecycle-viewmodel-compose:${Versions.lifecycle}"
 

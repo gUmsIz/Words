@@ -72,9 +72,9 @@ class MainViewModel(application: Application, private val wordRepository: Reposi
                 dataStateFlow.value = Resource.loading(data = null, message = msg)
                 try {
                     wordRepository.loadAllData()
+                    Log.i("MainScreen", "prepare called2")
                     sData.edit().putBoolean("dataLoaded", true).apply()
                     dataStateFlow.value = Resource.success(data = "null")
-
                 } catch (exception: Exception) {
                     dataStateFlow.value =
                         Resource.error(data = null, message = exception.message ?: "Error Occured!")

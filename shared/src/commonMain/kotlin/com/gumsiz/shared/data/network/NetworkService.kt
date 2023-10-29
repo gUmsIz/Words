@@ -9,6 +9,6 @@ interface NetworkService {
     suspend fun getData():List<WordNetworkModel>
 }
 
-class NetworkServiceImp(private val client: HttpClient): NetworkService{
+class NetworkServiceImp(private val client: HttpClient): NetworkService {
     override suspend fun getData() = client.get("http://gumsiz.hol.es/connect.php").body<List<WordNetworkModel>>()
 }
