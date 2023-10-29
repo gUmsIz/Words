@@ -6,19 +6,17 @@ struct ContentView: View {
     
     @ObservedObject private(set) var viewModel: ViewModel
     
-    @State var index = 0
-    
     var body: some View {
         NavigationView {
-            //TabbedView()
+            TabbedView(verbList: viewModel.verbList)
             //Text("\(viewModel.verbList.count)")
-            ScrollView {
+            /*ScrollView {
                 LazyVStack(alignment: .leading) {
                     ForEach(viewModel.verbList, id: \.self) { wordModel in
                         Text(wordModel?.name ?? "empty")
                     }
                 }
-            }
+            }*/
         }
     }
     
@@ -46,7 +44,8 @@ struct ContentView: View {
                         guard let colorHex = verblist else {
                                         return
                                     }
-                        self.verbList.append(contentsOf: colorHex as! [WordModel?])
+                        //self.verbList.append(contentsOf: colorHex as! [WordModel?])
+                        self.verbList = colorHex as? [WordModel?] ?? []
                         
                     }
                 } catch {
@@ -60,16 +59,26 @@ struct ContentView: View {
         
         @State private var selectedTab: Int = 0
         
+        let verbList: [WordModel?]
+        
         var body: some View {
             VStack {
                 Picker("", selection: $selectedTab) {
-                    Text("First").tag(0)
-                    Text("Second").tag(1)
+                    Text("Verben").tag(0)
+                    Text("Favorite").tag(1)
                 }
                 .pickerStyle(.segmented)
                 
                 switch(selectedTab) {
-                case 0: Text("Second3").frame(maxWidth:.infinity,maxHeight: .infinity)
+                case 0: ScrollView {
+                    LazyVStack(alignment: .leading) {
+                        ForEach(verbList, id: \.self) { wordModel in
+                            NavigationLink(destination: Text(wordModel?.name ?? "empty")){
+                                Text(wordModel?.name ?? "empty")
+                            }
+                        }
+                    }
+                }
                 case 1: Text("Second4").frame(maxWidth:.infinity,maxHeight: .infinity)
                 default:
                     Text("Second")
