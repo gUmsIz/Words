@@ -1,5 +1,6 @@
 package com.gumsiz.shared.data.db
 
+import com.gumsiz.shared.data.model.SettingDatabaseModel
 import com.gumsiz.shared.data.model.WordDatabaseModel
 import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.shared.data.model.toWordModel
@@ -18,6 +19,8 @@ interface Database {
     suspend fun update(name: String)
     suspend fun getVerb(name: String): WordModel?
     suspend fun searchInVerbs(searchQuery: String): Flow<List<WordModel?>>
+    suspend fun getHasDataLoaded(): Boolean
+    suspend fun setDataLoaded(isDataLoaded: Boolean)
 }
 
 class DataBaseImpl(private val realm: Realm) : Database {
@@ -59,6 +62,27 @@ class DataBaseImpl(private val realm: Realm) : Database {
     override suspend fun searchInVerbs(searchQuery: String) = flow {
         realm.query<WordDatabaseModel>("name TEXT $0", searchQuery).find().asFlow().collect {
             emit(it.list.map { it.toWordModel() })
+        }
+    }
+
+    override suspend fun getHasDataLoaded(): Boolean =
+        try {
+            realm.query<SettingDatabaseModel>().find().first().dataLoaded
+        } catch (e: NoSuchElementException) {
+            false
+        }
+
+    override suspend fun setDataLoaded(isDataLoaded: Boolean) {
+        CoroutineScope(Dispatchers.Default).launch {
+            realm.write {
+                val settings = try {
+                    realm.query<SettingDatabaseModel>().find().first().dataLoaded
+                } catch (e: NoSuchElementException) {
+                    null
+                }
+                if (settings == null) copyToRealm(SettingDatabaseModel(dataLoaded = isDataLoaded)) else (settings as SettingDatabaseModel).dataLoaded =
+                    isDataLoaded
+            }
         }
     }
 }

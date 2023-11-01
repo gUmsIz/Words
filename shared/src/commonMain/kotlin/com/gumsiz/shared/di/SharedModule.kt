@@ -3,6 +3,7 @@ package com.gumsiz.shared.di
 import com.gumsiz.shared.data.Repository
 import com.gumsiz.shared.data.db.DataBaseImpl
 import com.gumsiz.shared.data.db.Database
+import com.gumsiz.shared.data.model.SettingDatabaseModel
 import com.gumsiz.shared.data.model.WordDatabaseModel
 import com.gumsiz.shared.data.network.NetworkService
 import com.gumsiz.shared.data.network.NetworkServiceImp
@@ -17,7 +18,7 @@ import org.koin.dsl.module
 
 fun sharedModule() = module {
     single {
-        val config = RealmConfiguration.create(schema = setOf(WordDatabaseModel::class))
+        val config = RealmConfiguration.create(schema = setOf(WordDatabaseModel::class,SettingDatabaseModel::class))
         Realm.open(config)
     }
     single<Database> { DataBaseImpl(get()) }
