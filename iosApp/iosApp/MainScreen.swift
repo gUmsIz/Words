@@ -5,9 +5,6 @@ import shared
 struct MainScreen: View {
     @State private var selectedTab: Int = 0
     @State private var searchText: String = ""
-    let primaryColor = Color(red: 1, green: 0.898, blue: 0.498) // #ffe57f
-    let primaryLightColor = Color(red: 1, green: 1, blue: 0.69) // #ffffb0
-    let primaryDarkColor = Color(red: 0.792, green: 0.702, blue: 0.314) // #cab350
     let verbList: [WordModel?]
     let verbListFavorite: [WordModel?]
     
@@ -56,12 +53,12 @@ struct MainScreen: View {
                 }
             }
             .padding()
-            .background(primaryColor.edgesIgnoringSafeArea(.all))
+            .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
             
             TextField("Geben Sie ein Wort ein", text: $searchText)
                 .padding(.horizontal)
                 .frame(height: 48)
-                .background(primaryLightColor)
+                .background(Colors.primaryLightColor)
                 .clipShape(.rect(cornerRadius: 20))
                 .overlay( /// apply a rounded border
                     RoundedRectangle(cornerRadius: 20)
@@ -97,7 +94,7 @@ struct VerListView: View {
             .padding(.top)
             .background(primaryLightColor)
             .clipShape(.rect(cornerRadius: 20))
-            .overlay( /// apply a rounded border
+            .overlay(
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(.gray, lineWidth: 1)
             )
