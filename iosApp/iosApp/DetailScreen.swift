@@ -19,13 +19,16 @@ struct DetailScreen: View {
                     
                 }
             }
-            .background(Color.yellow.edgesIgnoringSafeArea(.all))
-            Text("\(wordModel?.name.uppercased() ?? "")")
-            Spacer()
-            Translation()
-            Konjugation(wordModel: wordModel)
-            Structure(wordModel: wordModel)
-            Samples(wordModel: wordModel)
+            .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Text("\(wordModel?.name.uppercased() ?? "")").padding(.horizontal)
+                    Translation()
+                    Konjugation(wordModel: wordModel)
+                    Structure(wordModel: wordModel)
+                    Samples(wordModel: wordModel)
+                }
+            }
         }
     }
 }
@@ -96,7 +99,7 @@ struct Konjugation: View {
 struct Structure: View {
     let wordModel: WordModel?
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
                 Text("Strukturen")
                     .padding()
@@ -106,6 +109,10 @@ struct Structure: View {
                             .stroke(Colors.primaryDarkColor, lineWidth: 1)
                     )
                 Spacer()
+            }
+            
+            ForEach(getStructureList(),id: \.self){words in
+                Text(words).padding(.horizontal)
             }
         }
         .background(Colors.primaryLightColor)
@@ -117,11 +124,19 @@ struct Structure: View {
         .padding()
         .shadow(radius: 5)
     }
+    
+    func getStructureList() -> [String] {
+        var a:[String] = []
+        for word in wordModel!.structure!{
+            a.append(word as! String)
+        }
+        return a
+    }
 }
 struct Samples: View {
     let wordModel: WordModel?
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
                 Text("Beispiele")
                     .padding()
@@ -132,6 +147,10 @@ struct Samples: View {
                     )
                 Spacer()
             }
+            
+            ForEach(getSampleList(),id: \.self){words in
+                Text(words).padding(.horizontal)
+            }
         }
         .background(Colors.primaryLightColor)
         .clipShape(.rect(cornerRadius: 20))
@@ -141,5 +160,12 @@ struct Samples: View {
         )
         .padding()
         .shadow(radius: 5)
+    }
+    func getSampleList() -> [String] {
+        var a:[String] = []
+        for word in wordModel!.sampleSentence!{
+            a.append(word as! String)
+        }
+        return a
     }
 }
