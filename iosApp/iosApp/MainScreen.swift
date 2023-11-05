@@ -3,58 +3,85 @@ import SwiftUI
 import shared
 
 struct MainScreen: View {
+    @Environment(\.openURL) var openURL
     @EnvironmentObject var viewModel: ViewModel
     @State private var selectedTab: Int = 0
-    
+    @State private var isDialogVisible = false;
     var body: some View {
-        VStack {
-            VStack{
-                HStack {
-                    Text("Verben").padding(.leading).font(.title)
-                    Spacer()
-                }
-                HStack {
-                    Spacer()
+        GeometryReader { geometry in
+            VStack {
+                VStack{
                     HStack {
-                        Image(systemName: "airplane")
-                            .foregroundColor(selectedTab == 0 ? Color.red : Color.black)
-                        Text("Verben")
+                        Text("Verben").padding(.leading).font(.title)
+                        Spacer()
+                        Menu {
+                            Button("Über App") {
+                                isDialogVisible.toggle()
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis").foregroundColor(.black)
+                        }.alert("Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für Erwachsene)",isPresented: $isDialogVisible){
+                            Button("Ok",role:.cancel) {
+                                
+                            }
+                            Button("d-seite.de") {
+                                openURL(URL(string: "https://d-seite.de")!)
+                            }
+                        }
+
                     }
-                    .onTapGesture {
-                        self.selectedTab = 0
-                    }
-                    Spacer()
+                    .overlay(alignment: .bottom, content: {
+                        Divider()
+                            .shadow(radius: 5)
+                    })
                     HStack {
-                        Image(systemName: "heart.fill")
-                            .foregroundColor(selectedTab == 1 ? Color.red : Color.black)
+                        HStack {
+                            Text("Verben")
+                        }
+                        .frame(minWidth: 0, maxWidth:.infinity)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            self.selectedTab = 0
+                        }
+                        HStack {
+                            Image(systemName: selectedTab == 1 ? "heart.fill" : "heart")
+                                .contentTransition(.symbolEffect(.replace))
+                        }
+                        .frame(minWidth: 0, maxWidth:.infinity)
+                        .contentShape(.rect)
+                        .onTapGesture {
+                            self.selectedTab = 1
+                        }
                     }
-                    .onTapGesture {
-                        self.selectedTab = 1
-                    }
-                    Spacer()
                 }
+                .padding()
+                .overlay(alignment: (selectedTab == 0) ? .bottomLeading :.bottomTrailing, content: {
+                    Divider()
+                        .frame(width: geometry.size.width/2,height: 2)
+                        .background(.white).animation(.easeInOut, value: selectedTab)
+                })
+                .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
+                
+                TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
+                    .padding(.horizontal)
+                    .textInputAutocapitalization(.never)
+                    .frame(height: 48)
+                    .background(Colors.primaryLightColor)
+                    .clipShape(.rect(cornerRadius: 20))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(.gray, lineWidth: 1)
+                    )
+                    .padding(.horizontal)
+                Spacer()
+                switch(selectedTab){
+                case 0: VerListView()
+                case 1: FavVerListView()
+                default:
+                    Text("Second")
+                }
+                
             }
-            .padding()
-            .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
-            
-            TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
-                .padding(.horizontal)
-                .frame(height: 48)
-                .background(Colors.primaryLightColor)
-                .clipShape(.rect(cornerRadius: 20))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 20)
-                        .stroke(.gray, lineWidth: 1)
-                )
-                .padding(.horizontal)
-            Spacer()
-            switch(selectedTab){
-            case 0: VerListView()
-            case 1: FavVerListView()
-            default:
-                Text("Second")
-            }
-            
         }
     }
 }
@@ -69,7 +96,7 @@ struct VerListView: View {
                         NavigationLink(destination: DetailScreen(
                             wordModel: wordModel)){
                                 Text(wordModel.name)
-                        }
+                            }
                     }.foregroundColor(.black)
                 }
             }
@@ -96,7 +123,7 @@ struct FavVerListView: View {
                         NavigationLink(destination: DetailScreen(
                             wordModel: wordModel)){
                                 Text(wordModel.name)
-                        }
+                            }
                     }.foregroundColor(.black)
                 }
             }

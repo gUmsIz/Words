@@ -49,9 +49,10 @@ struct DetailScreen: View {
 struct Translation: View {
     @EnvironmentObject var viewModel: ViewModel
     let wordModel: WordModel?
-    @State var isDialogVisible = false;
+    @State private var isDialogVisible = false;
+    @State private var translation = "";
     var body: some View {
-        VStack{
+        VStack(alignment: .leading){
             HStack{
                 Text("Übersetzung")
                     .padding()
@@ -75,20 +76,39 @@ struct Translation: View {
                         bottomTrailingRadius: 0,
                         topTrailingRadius: 0))
                     .onTapGesture {
-                        print("size :\(wordModel!.translation.count)")
                         isDialogVisible.toggle()
                     }
-                    .alert("Hello",isPresented: $isDialogVisible){
-                        Text("HHH")
-                        Button("OK", action: {})
+                    .alert("Add Translation",isPresented: $isDialogVisible){
+                        TextField("New translation", text: $translation).textInputAutocapitalization(.never)
+                            .padding(.horizontal)
+                        Button("Add", action: {
+                            if !translation.isEmpty {
+                                wordModel?.translation.add(translation)
+                                viewModel.updateFavState(wordModel: wordModel)
+                                translation = ""
+                                isDialogVisible = false
+                            }
+                        })
                         Button("Cancel", role: .cancel) { }
-                    } message: {
-                        Text("GG")
                     }
-                /*ForEach(wordModel?.translation, id:\.self) { item in
-                 Text(item)
-                 }*/
+                
+                        
             }
+            ForEach(getTranslationList(),id: \.self){
+                item in
+                HStack {
+                    Text("- \(item)")
+                    Spacer()
+                    Image(systemName: "trash")
+                    .contentTransition(.symbolEffect(.replace))
+                    .onTapGesture {
+                        withAnimation {
+                            wordModel?.translation.remove(item)
+                            viewModel.updateFavState(wordModel: wordModel)
+                        }
+                    }
+                }.padding(.horizontal)
+            }.padding(.bottom)
         }
         .background(Colors.primaryLightColor)
         .clipShape(.rect(cornerRadius: 20))
@@ -98,6 +118,14 @@ struct Translation: View {
         )
         .padding()
         .shadow(radius: 5)
+    }
+    //TODO write extension
+    func getTranslationList() -> [String] {
+        var list:[String] = []
+        for word in wordModel!.translation{
+            list.append(word as! String)
+        }
+        return list
     }
 }
 
@@ -164,11 +192,11 @@ struct Structure: View {
     }
     
     func getStructureList() -> [String] {
-        var a:[String] = []
+        var list:[String] = []
         for word in wordModel!.structure!{
-            a.append(word as! String)
+            list.append(word as! String)
         }
-        return a
+        return list
     }
 }
 struct Samples: View {
@@ -200,10 +228,10 @@ struct Samples: View {
         .shadow(radius: 5)
     }
     func getSampleList() -> [String] {
-        var a:[String] = []
+        var list:[String] = []
         for word in wordModel!.sampleSentence!{
-            a.append(word as! String)
+            list.append(word as! String)
         }
-        return a
+        return list
     }
 }
