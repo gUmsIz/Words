@@ -4,7 +4,7 @@ import kotlinx.serialization.json.Json
 
 data class WordModel(
     val name: String,
-    var translation: MutableList<String?>,
+    var translation: List<String?>,
     val firstSg: String?,
     val secondSg: String?,
     val imp: String?,
@@ -18,7 +18,7 @@ data class WordModel(
 
 fun WordDatabaseModel.toWordModel(): WordModel? {
 
-    return this.translation?.let { Json.decodeFromString<MutableList<String?>>(it) }?.let {
+    return this.translation?.let { Json.decodeFromString<List<String?>>(it) }?.let {
         WordModel(
             this.name,
             it,

@@ -3,26 +3,9 @@ import SwiftUI
 import shared
 
 struct MainScreen: View {
+    @EnvironmentObject var viewModel: ViewModel
     @State private var selectedTab: Int = 0
-    @State private var searchText: String = ""
-    let verbList: [WordModel?]
-    let verbListFavorite: [WordModel?]
     
-    var searchResults: [WordModel?] {
-        if searchText.isEmpty {
-            return verbList
-        } else {
-            return verbList.filter { $0!.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
-    
-    var favoriteSearchResults: [WordModel?] {
-        if searchText.isEmpty {
-            return verbListFavorite
-        } else {
-            return verbListFavorite.filter { $0!.name.lowercased().contains(searchText.lowercased()) }
-        }
-    }
     var body: some View {
         VStack {
             VStack{
@@ -42,9 +25,8 @@ struct MainScreen: View {
                     }
                     Spacer()
                     HStack {
-                        Image(systemName: "person.fill")
+                        Image(systemName: "heart.fill")
                             .foregroundColor(selectedTab == 1 ? Color.red : Color.black)
-                        //Text("Second tab")
                     }
                     .onTapGesture {
                         self.selectedTab = 1
@@ -55,20 +37,20 @@ struct MainScreen: View {
             .padding()
             .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
             
-            TextField("Geben Sie ein Wort ein", text: $searchText)
+            TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
                 .padding(.horizontal)
                 .frame(height: 48)
                 .background(Colors.primaryLightColor)
                 .clipShape(.rect(cornerRadius: 20))
-                .overlay( /// apply a rounded border
+                .overlay(
                     RoundedRectangle(cornerRadius: 20)
                         .stroke(.gray, lineWidth: 1)
                 )
                 .padding(.horizontal)
             Spacer()
             switch(selectedTab){
-            case 0: VerListView(searchResults: searchResults)
-            case 1: VerListView(searchResults: favoriteSearchResults)
+            case 0: VerListView()
+            case 1: FavVerListView()
             default:
                 Text("Second")
             }
@@ -76,23 +58,51 @@ struct MainScreen: View {
         }
     }
 }
+@available(iOS 17.0, *)
 struct VerListView: View {
-    let searchResults : [WordModel?]
-    let primaryLightColor = Color(red: 1, green: 1, blue: 0.69) // #ffffb0
+    @EnvironmentObject var viewModel: ViewModel
     var body: some View {
         VStack {
             ScrollView {
                 LazyVStack(alignment: .leading) {
-                    ForEach(searchResults, id: \.self) { wordModel in
-                        NavigationLink(destination: DetailScreen(wordModel: wordModel)){
-                            Text(wordModel?.name ?? "empty")
+                    ForEach(viewModel.searchResults) { wordModel in
+                        NavigationLink(destination: DetailScreen(
+                            wordModel: wordModel)){
+                                Text(wordModel.name)
                         }
                     }.foregroundColor(.black)
                 }
             }
             .padding(.leading)
             .padding(.top)
-            .background(primaryLightColor)
+            .background(Colors.primaryLightColor)
+            .clipShape(.rect(cornerRadius: 20))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20)
+                    .stroke(.gray, lineWidth: 1)
+            )
+            .padding(.horizontal)
+        }
+    }
+}
+@available(iOS 17.0, *)
+struct FavVerListView: View {
+    @EnvironmentObject var viewModel: ViewModel
+    var body: some View {
+        VStack {
+            ScrollView {
+                LazyVStack(alignment: .leading) {
+                    ForEach(viewModel.favoriteSearchResults) { wordModel in
+                        NavigationLink(destination: DetailScreen(
+                            wordModel: wordModel)){
+                                Text(wordModel.name)
+                        }
+                    }.foregroundColor(.black)
+                }
+            }
+            .padding(.leading)
+            .padding(.top)
+            .background(Colors.primaryLightColor)
             .clipShape(.rect(cornerRadius: 20))
             .overlay(
                 RoundedRectangle(cornerRadius: 20)
@@ -104,5 +114,5 @@ struct VerListView: View {
 }
 
 #Preview {
-    MainScreen(verbList: [],verbListFavorite: [])
+    MainScreen()
 }

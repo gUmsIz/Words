@@ -9,21 +9,30 @@
 import SwiftUI
 import shared
 struct DetailScreen: View {
+    @EnvironmentObject var viewModel: ViewModel
     let wordModel: WordModel?
     var body: some View {
         VStack{
             HStack {
                 Text("Verben").padding(.leading).font(.title)
                 Spacer()
-                Image(systemName: "person.fill").padding(.trailing).onTapGesture {
-                    
-                }
+                Image(systemName: wordModel!.favorite ? "heart.fill":"heart")
+                    .contentTransition(.symbolEffect(.replace))
+                    .padding(.trailing).foregroundColor(
+                        wordModel!.favorite ? Color.red:Color.black
+                    )
+                    .onTapGesture {
+                        viewModel.updateFavState(name: wordModel?.name)
+                        withAnimation {
+                            wordModel!.favorite = !wordModel!.favorite
+                        }
+                    }
             }
             .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
             ScrollView {
                 VStack(alignment: .leading) {
                     Text("\(wordModel?.name.uppercased() ?? "")").padding(.horizontal)
-                    Translation()
+                    Translation(wordModel: wordModel)
                     Konjugation(wordModel: wordModel)
                     Structure(wordModel: wordModel)
                     Samples(wordModel: wordModel)
@@ -38,6 +47,9 @@ struct DetailScreen: View {
 }
 
 struct Translation: View {
+    @EnvironmentObject var viewModel: ViewModel
+    let wordModel: WordModel?
+    @State var isDialogVisible = false;
     var body: some View {
         VStack{
             HStack{
@@ -49,7 +61,33 @@ struct Translation: View {
                             .stroke(Colors.primaryDarkColor, lineWidth: 1)
                     )
                 Spacer()
-                Image(systemName: "person.fill")
+                Image(systemName: "plus")
+                    .foregroundColor(.green)
+                    .padding()
+                    .background(Colors.primaryDarkColor)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Colors.primaryDarkColor, lineWidth: 1)
+                    )
+                    .clipShape(.rect(
+                        topLeadingRadius: 0,
+                        bottomLeadingRadius: 20,
+                        bottomTrailingRadius: 0,
+                        topTrailingRadius: 0))
+                    .onTapGesture {
+                        print("size :\(wordModel!.translation.count)")
+                        isDialogVisible.toggle()
+                    }
+                    .alert("Hello",isPresented: $isDialogVisible){
+                        Text("HHH")
+                        Button("OK", action: {})
+                        Button("Cancel", role: .cancel) { }
+                    } message: {
+                        Text("GG")
+                    }
+                /*ForEach(wordModel?.translation, id:\.self) { item in
+                 Text(item)
+                 }*/
             }
         }
         .background(Colors.primaryLightColor)

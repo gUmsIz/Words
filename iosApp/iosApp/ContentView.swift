@@ -4,12 +4,14 @@ import shared
 struct ContentView: View {
     let greet = Greeting().greet()
     
-    @ObservedObject private(set) var viewModel: ViewModel
+    @StateObject var viewModel = ViewModel()
     
     var body: some View {
-        NavigationView {
-            MainScreen(verbList: viewModel.verbList,verbListFavorite: viewModel.verbListFavorite)
+        NavigationStack {
+            MainScreen()
         }
+        .navigationViewStyle(.stack)
+        .environmentObject(viewModel)
     }
     
     struct ContentView_Previews: PreviewProvider {
@@ -19,3 +21,4 @@ struct ContentView: View {
     }
     
 }
+extension WordModel : Identifiable{}
