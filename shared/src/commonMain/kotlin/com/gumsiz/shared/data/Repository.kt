@@ -30,7 +30,7 @@ class Repository(
         database.setDataLoaded(true)
     }
 
-    suspend fun updateFavoriteStateInDB(name:String) = database.update(name)
+    suspend fun updateFavoriteStateInDB(wordModel: WordModel) = database.update(wordModel)
 
     suspend fun getWordFromDB(name: String): WordModel? = database.getVerb(name)
 }

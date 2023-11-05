@@ -53,10 +53,10 @@ class ViewModel: ObservableObject{
         }
     }
     
-    func updateFavState(name: String?) {
-        if name == nil {return}
+    func updateFavState(wordModel: WordModel?) {
+        if wordModel?.name == nil {return}
         Task{
-            try await repo.updateFavoriteStateInDB(name: name!)
+            try await repo.updateFavoriteStateInDB(wordModel: wordModel!)
         }
     }
 }

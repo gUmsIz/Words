@@ -11,12 +11,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 interface Database {
     val verbList: Flow<List<WordModel?>>
     val verbListFavorite: Flow<List<WordModel?>>
     suspend fun addAllItems(words: List<WordDatabaseModel>)
-    suspend fun update(name: String)
+    suspend fun update(wordModel: WordModel)
     suspend fun getVerb(name: String): WordModel?
     suspend fun searchInVerbs(searchQuery: String): Flow<List<WordModel?>>
     suspend fun getHasDataLoaded(): Boolean
@@ -47,11 +49,12 @@ class DataBaseImpl(private val realm: Realm) : Database {
         }
     }
 
-    override suspend fun update(name: String) {
+    override suspend fun update(wordModel: WordModel) {
         CoroutineScope(Dispatchers.Default).launch {
             realm.write {
-                val wordInDB = this.query<WordDatabaseModel>("name==$0", name).find().first()
-                wordInDB.favorite = !wordInDB.favorite
+                val wordInDB = this.query<WordDatabaseModel>("name==$0", wordModel.name).find().first()
+                wordInDB.favorite = wordModel.favorite
+                wordInDB.translation = Json.encodeToString(wordModel.translation)
             }
         }
     }

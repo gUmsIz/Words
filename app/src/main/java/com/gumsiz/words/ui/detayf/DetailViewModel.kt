@@ -28,7 +28,7 @@ class DetailViewModel(
 
     fun doAction(wordDB: WordModel) {
         scope.launch {
-            wordRepository.updateFavoriteStateInDB(wordDB.name)
+            wordRepository.updateFavoriteStateInDB(wordDB)
         }
     }
 
@@ -45,7 +45,7 @@ class DetailViewModel(
         scope.launch {
             //database.update(wordDB)
             if (wordDB.favorite) _favUpdate.value = 1 else _favUpdate.value = 2
-            wordRepository.updateFavoriteStateInDB(wordDB.name)
+            wordRepository.updateFavoriteStateInDB(wordDB)
         }
     }
 

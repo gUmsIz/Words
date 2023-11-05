@@ -22,10 +22,10 @@ struct DetailScreen: View {
                         wordModel!.favorite ? Color.red:Color.black
                     )
                     .onTapGesture {
-                        viewModel.updateFavState(name: wordModel?.name)
                         withAnimation {
                             wordModel!.favorite = !wordModel!.favorite
                         }
+                        viewModel.updateFavState(wordModel: wordModel)
                     }
             }
             .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
