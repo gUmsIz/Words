@@ -12,29 +12,6 @@ struct MainScreen: View {
             VStack {
                 VStack{
                     HStack {
-                        Text("Verben").padding(.leading).font(.title)
-                        Spacer()
-                        Menu {
-                            Button("Über App") {
-                                isDialogVisible.toggle()
-                            }
-                        } label: {
-                            Image(systemName: "ellipsis").foregroundColor(.black)
-                        }.alert("Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für Erwachsene)",isPresented: $isDialogVisible){
-                            Button("Ok",role:.cancel) {
-                                
-                            }
-                            Button("d-seite.de") {
-                                openURL(URL(string: "https://d-seite.de")!)
-                            }
-                        }
-
-                    }
-                    .overlay(alignment: .bottom, content: {
-                        Divider()
-                            .shadow(radius: 5)
-                    })
-                    HStack {
                         HStack {
                             Text("Verben")
                         }
@@ -55,11 +32,15 @@ struct MainScreen: View {
                     }
                 }
                 .padding()
-                .overlay(alignment: (selectedTab == 0) ? .bottomLeading :.bottomTrailing, content: {
+                .overlay(alignment: (selectedTab == 0) ? .bottomLeading :.bottomTrailing){
                     Divider()
                         .frame(width: geometry.size.width/2,height: 2)
                         .background(.white).animation(.easeInOut, value: selectedTab)
-                })
+                }
+                .overlay(alignment: .top){
+                    Divider()
+                        .shadow(radius: 5)
+                }
                 .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
                 
                 TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
@@ -80,12 +61,32 @@ struct MainScreen: View {
                 default:
                     Text("Second")
                 }
-                
+            }
+            .toolbar{
+                ToolbarItem(placement: .topBarLeading) {
+                    Text("Verben")
+                }
+                ToolbarItem(placement: .topBarTrailing){
+                    Menu {
+                        Button("Über App") {
+                            isDialogVisible.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "ellipsis").foregroundColor(.black)
+                    }.alert("Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für Erwachsene)",isPresented: $isDialogVisible){
+                        Button("Ok",role:.cancel) {
+                            
+                        }
+                        Button("d-seite.de") {
+                            openURL(URL(string: "https://d-seite.de")!)
+                        }
+                    }
+                }
             }
         }
     }
 }
-@available(iOS 17.0, *)
+
 struct VerListView: View {
     @EnvironmentObject var viewModel: ViewModel
     var body: some View {
@@ -112,7 +113,7 @@ struct VerListView: View {
         }
     }
 }
-@available(iOS 17.0, *)
+
 struct FavVerListView: View {
     @EnvironmentObject var viewModel: ViewModel
     var body: some View {

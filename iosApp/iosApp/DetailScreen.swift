@@ -13,9 +13,20 @@ struct DetailScreen: View {
     let wordModel: WordModel?
     var body: some View {
         VStack{
-            HStack {
-                Text("Verben").padding(.leading).font(.title)
-                Spacer()
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Translation(wordModel: wordModel)
+                    Konjugation(wordModel: wordModel)
+                    Structure(wordModel: wordModel)
+                    Samples(wordModel: wordModel)
+                }
+            }
+        }
+        .toolbar{
+            ToolbarItem(placement: .principal) {
+                Text(wordModel?.name.capitalized ?? "")
+            }
+            ToolbarItem(placement: .topBarTrailing) {
                 Image(systemName: wordModel!.favorite ? "heart.fill":"heart")
                     .contentTransition(.symbolEffect(.replace))
                     .padding(.trailing).foregroundColor(
@@ -28,17 +39,9 @@ struct DetailScreen: View {
                         viewModel.updateFavState(wordModel: wordModel)
                     }
             }
-            .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
-            ScrollView {
-                VStack(alignment: .leading) {
-                    Text("\(wordModel?.name.uppercased() ?? "")").padding(.horizontal)
-                    Translation(wordModel: wordModel)
-                    Konjugation(wordModel: wordModel)
-                    Structure(wordModel: wordModel)
-                    Samples(wordModel: wordModel)
-                }
-            }
         }
+        .toolbarBackground(Colors.primaryColor, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 }
 
@@ -92,7 +95,7 @@ struct Translation: View {
                         Button("Cancel", role: .cancel) { }
                     }
                 
-                        
+                
             }
             ForEach(getTranslationList(),id: \.self){
                 item in
@@ -100,13 +103,13 @@ struct Translation: View {
                     Text("- \(item)")
                     Spacer()
                     Image(systemName: "trash")
-                    .contentTransition(.symbolEffect(.replace))
-                    .onTapGesture {
-                        withAnimation {
-                            wordModel?.translation.remove(item)
-                            viewModel.updateFavState(wordModel: wordModel)
+                        .contentTransition(.symbolEffect(.replace))
+                        .onTapGesture {
+                            withAnimation {
+                                wordModel?.translation.remove(item)
+                                viewModel.updateFavState(wordModel: wordModel)
+                            }
                         }
-                    }
                 }.padding(.horizontal)
             }.padding(.bottom)
         }
@@ -120,7 +123,7 @@ struct Translation: View {
         .shadow(radius: 5)
     }
     //TODO write extension
-    func getTranslationList() -> [String] {
+    private func getTranslationList() -> [String] {
         var list:[String] = []
         for word in wordModel!.translation{
             list.append(word as! String)
@@ -150,7 +153,7 @@ struct Konjugation: View {
                 Text("Ich / Er-Sie-Es \(wordModel?.pret ?? "") (Prät.)")
                 Text("Ich habe \(wordModel?.perfSg ?? "") (Perf.)")
                 Text("\(wordModel?.konj2FSg ?? "") (Konjunktiv 2)")
-            }.padding(.leading)
+            }.padding([.leading , .bottom])
         }
         .background(Colors.primaryLightColor)
         .clipShape(.rect(cornerRadius: 20))
@@ -179,7 +182,7 @@ struct Structure: View {
             
             ForEach(getStructureList(),id: \.self){words in
                 Text(words).padding(.horizontal)
-            }
+            }.padding(.bottom)
         }
         .background(Colors.primaryLightColor)
         .clipShape(.rect(cornerRadius: 20))
@@ -191,7 +194,7 @@ struct Structure: View {
         .shadow(radius: 5)
     }
     
-    func getStructureList() -> [String] {
+    private func getStructureList() -> [String] {
         var list:[String] = []
         for word in wordModel!.structure!{
             list.append(word as! String)
@@ -216,7 +219,7 @@ struct Samples: View {
             
             ForEach(getSampleList(),id: \.self){words in
                 Text(words).padding(.horizontal)
-            }
+            }.padding(.bottom)
         }
         .background(Colors.primaryLightColor)
         .clipShape(.rect(cornerRadius: 20))
@@ -227,7 +230,7 @@ struct Samples: View {
         .padding()
         .shadow(radius: 5)
     }
-    func getSampleList() -> [String] {
+    private func getSampleList() -> [String] {
         var list:[String] = []
         for word in wordModel!.sampleSentence!{
             list.append(word as! String)
