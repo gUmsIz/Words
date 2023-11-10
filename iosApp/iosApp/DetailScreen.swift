@@ -59,25 +59,25 @@ struct Translation: View {
             HStack{
                 Text("Übersetzung")
                     .padding()
-                    .background(Colors.primaryDarkColor)
+                    .background(Colors.primaryColor)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Colors.primaryDarkColor, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: Size.cornerRadius)
+                            .stroke(Colors.primaryColor, lineWidth: 1)
                     )
                 Spacer()
                 Image(systemName: "plus")
                     .foregroundColor(.green)
                     .padding()
-                    .background(Colors.primaryDarkColor)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Colors.primaryDarkColor, lineWidth: 1)
-                    )
+                    .background(Colors.primaryColor)
                     .clipShape(.rect(
                         topLeadingRadius: 0,
-                        bottomLeadingRadius: 20,
+                        bottomLeadingRadius: Size.cornerRadius,
                         bottomTrailingRadius: 0,
                         topTrailingRadius: 0))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: Size.cornerRadius)
+                            .stroke(Colors.primaryColor, lineWidth: 1)
+                    )
                     .onTapGesture {
                         isDialogVisible.toggle()
                     }
@@ -113,12 +113,7 @@ struct Translation: View {
                 }.padding(.horizontal)
             }.padding(.bottom)
         }
-        .background(Colors.primaryLightColor)
-        .clipShape(.rect(cornerRadius: 20))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Colors.primaryLightColor, lineWidth: 1)
-        )
+        .roundedBorder(color:Colors.primaryLightColor)
         .padding()
         .shadow(radius: 5)
     }
@@ -139,10 +134,10 @@ struct Konjugation: View {
             HStack{
                 Text("Konjuagtionen")
                     .padding()
-                    .background(Colors.primaryDarkColor)
+                    .background(Colors.primaryColor)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Colors.primaryDarkColor, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: Size.cornerRadius)
+                            .stroke(Colors.primaryColor, lineWidth: 1)
                     )
                 Spacer()
             }
@@ -155,12 +150,7 @@ struct Konjugation: View {
                 Text("\(wordModel?.konj2FSg ?? "") (Konjunktiv 2)")
             }.padding([.leading , .bottom])
         }
-        .background(Colors.primaryLightColor)
-        .clipShape(.rect(cornerRadius: 20))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Colors.primaryLightColor, lineWidth: 1)
-        )
+        .roundedBorder(color:Colors.primaryLightColor)
         .padding()
         .shadow(radius: 5)
     }
@@ -172,10 +162,10 @@ struct Structure: View {
             HStack{
                 Text("Strukturen")
                     .padding()
-                    .background(Colors.primaryDarkColor)
+                    .background(Colors.primaryColor)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Colors.primaryDarkColor, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: Size.cornerRadius)
+                            .stroke(Colors.primaryColor, lineWidth: 1)
                     )
                 Spacer()
             }
@@ -184,12 +174,7 @@ struct Structure: View {
                 Text(words).padding(.horizontal)
             }.padding(.bottom)
         }
-        .background(Colors.primaryLightColor)
-        .clipShape(.rect(cornerRadius: 20))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Colors.primaryLightColor, lineWidth: 1)
-        )
+        .roundedBorder(color:Colors.primaryLightColor)
         .padding()
         .shadow(radius: 5)
     }
@@ -209,10 +194,10 @@ struct Samples: View {
             HStack{
                 Text("Beispiele")
                     .padding()
-                    .background(Colors.primaryDarkColor)
+                    .background(Colors.primaryColor)
                     .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(Colors.primaryDarkColor, lineWidth: 1)
+                        RoundedRectangle(cornerRadius: Size.cornerRadius)
+                            .stroke(Colors.primaryColor, lineWidth: 1)
                     )
                 Spacer()
             }
@@ -221,12 +206,7 @@ struct Samples: View {
                 Text(words).padding(.horizontal)
             }.padding(.bottom)
         }
-        .background(Colors.primaryLightColor)
-        .clipShape(.rect(cornerRadius: 20))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(Colors.primaryLightColor, lineWidth: 1)
-        )
+        .roundedBorder(color:Colors.primaryLightColor)
         .padding()
         .shadow(radius: 5)
     }

@@ -7,6 +7,7 @@ class ViewModel: ObservableObject{
     
     var verbList : [WordModel] = []
     var verbListFavorite : [WordModel] = []
+    @Published var isDataLoading = true;
     @Published var searchResults: [WordModel] = []
     @Published var favoriteSearchResults: [WordModel] = []
     @Published var searchText: String = "" {
@@ -47,6 +48,7 @@ class ViewModel: ObservableObject{
                     self.verbListFavorite = (verbListFavorite as? [WordModel?] ?? []).compactMap{$0}
                     self.favoriteSearchResults = self.verbListFavorite
                 }
+                isDataLoading = false
             } catch {
                 print("some error")
             }

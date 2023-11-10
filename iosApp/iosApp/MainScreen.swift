@@ -9,76 +9,77 @@ struct MainScreen: View {
     @State private var isDialogVisible = false;
     var body: some View {
         GeometryReader { geometry in
-            VStack {
-                VStack{
-                    HStack {
-                        HStack {
-                            Text("Verben")
+            ZStack {
+                if viewModel.isDataLoading{
+                    LoadingView()
+                }else {
+                    VStack {
+                        VStack{
+                            HStack {
+                                HStack {
+                                    Text("Verben")
+                                }
+                                .frame(minWidth: 0, maxWidth:.infinity)
+                                .contentShape(.rect)
+                                .onTapGesture {
+                                    self.selectedTab = 0
+                                }
+                                HStack {
+                                    Image(systemName: selectedTab == 1 ? "heart.fill" : "heart")
+                                        .contentTransition(.symbolEffect(.replace))
+                                }
+                                .frame(minWidth: 0, maxWidth:.infinity)
+                                .contentShape(.rect)
+                                .onTapGesture {
+                                    self.selectedTab = 1
+                                }
+                            }
                         }
-                        .frame(minWidth: 0, maxWidth:.infinity)
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            self.selectedTab = 0
+                        .padding()
+                        .overlay(alignment: (selectedTab == 0) ? .bottomLeading :.bottomTrailing){
+                            Divider()
+                                .frame(width: geometry.size.width/2,height: 2)
+                                .background(.white).animation(.easeInOut, value: selectedTab)
                         }
-                        HStack {
-                            Image(systemName: selectedTab == 1 ? "heart.fill" : "heart")
-                                .contentTransition(.symbolEffect(.replace))
+                        .overlay(alignment: .top){
+                            Divider()
+                                .shadow(radius: 5)
                         }
-                        .frame(minWidth: 0, maxWidth:.infinity)
-                        .contentShape(.rect)
-                        .onTapGesture {
-                            self.selectedTab = 1
+                        .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
+                        
+                        TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
+                            .padding(.horizontal)
+                            .textInputAutocapitalization(.never)
+                            .frame(height: 48)
+                            .roundedBorder(color:Colors.primaryLightColor)
+                            .padding(.horizontal)
+                        Spacer()
+                        switch(selectedTab){
+                        case 0: VerListView()
+                        case 1: FavVerListView()
+                        default:
+                            Text("Second")
                         }
                     }
-                }
-                .padding()
-                .overlay(alignment: (selectedTab == 0) ? .bottomLeading :.bottomTrailing){
-                    Divider()
-                        .frame(width: geometry.size.width/2,height: 2)
-                        .background(.white).animation(.easeInOut, value: selectedTab)
-                }
-                .overlay(alignment: .top){
-                    Divider()
-                        .shadow(radius: 5)
-                }
-                .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
-                
-                TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
-                    .padding(.horizontal)
-                    .textInputAutocapitalization(.never)
-                    .frame(height: 48)
-                    .background(Colors.primaryLightColor)
-                    .clipShape(.rect(cornerRadius: 20))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 20)
-                            .stroke(.gray, lineWidth: 1)
-                    )
-                    .padding(.horizontal)
-                Spacer()
-                switch(selectedTab){
-                case 0: VerListView()
-                case 1: FavVerListView()
-                default:
-                    Text("Second")
-                }
-            }
-            .toolbar{
-                ToolbarItem(placement: .topBarLeading) {
-                    Text("Verben")
-                }
-                ToolbarItem(placement: .topBarTrailing){
-                    Menu {
-                        Button("Über App") {
-                            isDialogVisible.toggle()
+                    .toolbar{
+                        ToolbarItem(placement: .topBarLeading) {
+                            Text("Verben")
                         }
-                    } label: {
-                        Image(systemName: "ellipsis").foregroundColor(.black)
-                    }.alert("Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für Erwachsene)",isPresented: $isDialogVisible){
-                        Button("Ok",role:.cancel) {
-                            
-                        }
-                        Button("d-seite.de") {
-                            openURL(URL(string: "https://d-seite.de")!)
+                        ToolbarItem(placement: .topBarTrailing){
+                            Menu {
+                                Button("Über App") {
+                                    isDialogVisible.toggle()
+                                }
+                            } label: {
+                                Image(systemName: "ellipsis").foregroundColor(.black)
+                            }.alert("Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für Erwachsene)",isPresented: $isDialogVisible){
+                                Button("Ok",role:.cancel) {
+                                    
+                                }
+                                Button("d-seite.de") {
+                                    openURL(URL(string: "https://d-seite.de")!)
+                                }
+                            }
                         }
                     }
                 }
@@ -103,12 +104,7 @@ struct VerListView: View {
             }
             .padding(.leading)
             .padding(.top)
-            .background(Colors.primaryLightColor)
-            .clipShape(.rect(cornerRadius: 20))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(.gray, lineWidth: 1)
-            )
+            .roundedBorder(color:Colors.primaryLightColor)
             .padding(.horizontal)
         }
     }
@@ -130,17 +126,50 @@ struct FavVerListView: View {
             }
             .padding(.leading)
             .padding(.top)
-            .background(Colors.primaryLightColor)
-            .clipShape(.rect(cornerRadius: 20))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(.gray, lineWidth: 1)
-            )
+            .roundedBorder(color:Colors.primaryLightColor)
             .padding(.horizontal)
         }
     }
 }
 
+struct LoadingView: View {
+    var body: some View{
+        VStack(alignment:.center){
+            Text("Vorbereitung für den ersten Gebrauch")
+            ProgressView()
+        }
+        .padding()
+        .roundedBorder(color:Colors.primaryColor)
+        .frame(
+            minWidth: 0,
+            maxWidth: .infinity,
+            minHeight: 0,
+            maxHeight: .infinity,
+            alignment: .center
+        )
+    }
+}
+
+struct RoundedBorder : ViewModifier {
+    let color: Color
+    func body(content: Content) -> some View {
+        content
+            .background(color)
+            .clipShape(.rect(cornerRadius: Size.cornerRadius))
+            .overlay(
+                RoundedRectangle(cornerRadius: Size.cornerRadius)
+                    .stroke(.gray, lineWidth: 1)
+            )
+    }
+}
+
+extension View {
+    func roundedBorder(color: Color) -> some View {
+        modifier(RoundedBorder(color: color))
+    }
+}
+
 #Preview {
-    MainScreen()
+    LoadingView()
+    //MainScreen()
 }

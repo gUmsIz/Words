@@ -14,3 +14,6 @@ struct Colors {
     static let primaryLightColor = Color(red: 1, green: 1, blue: 0.69) // #ffffb0
     static let primaryDarkColor = Color(red: 0.792, green: 0.702, blue: 0.314) // #cab350
 }
+struct Size {
+    static let cornerRadius = 16.0;
+}
