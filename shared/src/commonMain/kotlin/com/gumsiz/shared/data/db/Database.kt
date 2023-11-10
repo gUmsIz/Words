@@ -42,8 +42,14 @@ class DataBaseImpl(private val realm: Realm) : Database {
     override suspend fun addAllItems(words: List<WordDatabaseModel>) {
         CoroutineScope(Dispatchers.Default).launch {
             realm.write {
-                words.map {
-                    copyToRealm(it)
+                words.map { wordDatabaseModel ->
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8222;", "„")
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8220;", "“")
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8220;", "–")
+                    copyToRealm(wordDatabaseModel)
                 }
             }
         }
@@ -52,7 +58,8 @@ class DataBaseImpl(private val realm: Realm) : Database {
     override suspend fun update(wordModel: WordModel) {
         CoroutineScope(Dispatchers.Default).launch {
             realm.write {
-                val wordInDB = this.query<WordDatabaseModel>("name==$0", wordModel.name).find().first()
+                val wordInDB =
+                    this.query<WordDatabaseModel>("name==$0", wordModel.name).find().first()
                 wordInDB.favorite = wordModel.favorite
                 wordInDB.translation = Json.encodeToString(wordModel.translation)
             }

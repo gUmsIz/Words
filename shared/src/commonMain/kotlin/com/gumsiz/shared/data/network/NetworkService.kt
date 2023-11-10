@@ -6,9 +6,10 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 
 interface NetworkService {
-    suspend fun getData():List<WordNetworkModel>
+    suspend fun getData(): List<WordNetworkModel>
 }
 
-class NetworkServiceImp(private val client: HttpClient): NetworkService {
-    override suspend fun getData() = client.get("http://gumsiz.hol.es/connect.php").body<List<WordNetworkModel>>()
+class NetworkServiceImp(private val client: HttpClient) : NetworkService {
+    override suspend fun getData() =
+        client.get("http://gumsiz.hol.es/connect.php").body<List<WordNetworkModel>>()
 }
