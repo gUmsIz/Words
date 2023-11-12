@@ -1,5 +1,6 @@
 package com.gumsiz.words.ui.detayf
 
+import android.annotation.SuppressLint
 import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
@@ -15,7 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.twotone.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +33,7 @@ import com.gumsiz.words.ui.theme.WordsTheme
 import org.koin.androidx.compose.koinViewModel
 import java.util.*
 
+@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun DetailScreen(wordId: String = "") {
     val viewModel = koinViewModel<DetailViewModel>()
@@ -54,15 +56,15 @@ fun DetailScreen(wordId: String = "") {
                         if (favorite == null) {
                             wordDB?.let {
                                 Icon(
-                                    imageVector = if (it.favorite) Icons.Default.Favorite else Icons.TwoTone.Favorite,
-                                    tint = Color.Black,
+                                    imageVector = if (it.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                    tint = if (it.favorite) Color.Red else Color.Black,
                                     contentDescription = ""
                                 )
                             }
                         } else {
                             Icon(
-                                imageVector = if (favorite == 1) Icons.Default.Favorite else Icons.TwoTone.Favorite,
-                                tint = Color.Black,
+                                imageVector = if (favorite == 1) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                tint = if (favorite == 1) Color.Red else Color.Black,
                                 contentDescription = ""
                             )
                         }

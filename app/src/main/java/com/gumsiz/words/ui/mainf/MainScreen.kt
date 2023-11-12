@@ -3,6 +3,7 @@ package com.gumsiz.words.ui.mainf
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -13,6 +14,7 @@ import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -103,11 +105,23 @@ fun MainScreen(navController: NavController) {
                                         else -> {
                                             Tab(
                                                 icon = {
-                                                    if (unit is ImageVector) Icon(
-                                                        unit,
-                                                        tint = Color.Black,
-                                                        contentDescription = ""
-                                                    )
+                                                    if (unit is ImageVector) Crossfade(targetState = state == index,
+                                                        label = ""
+                                                    ) { state->
+                                                        if (state){
+                                                            Icon(
+                                                                unit,
+                                                                tint = Color.Black,
+                                                                contentDescription = ""
+                                                            )
+                                                        }else{
+                                                            Icon(
+                                                                Icons.Default.FavoriteBorder,
+                                                                tint = Color.Black,
+                                                                contentDescription = ""
+                                                            )
+                                                        }
+                                                    }
                                                 },
                                                 selected = state == index,
                                                 onClick = { state = index })
