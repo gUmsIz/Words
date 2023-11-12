@@ -40,25 +40,13 @@ android {
 
 dependencies {
     implementation(projects.shared)
-    implementation(Libraries.viewPager2)
 
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     implementation(Libraries.kotlinStdLib)
-    implementation(Libraries.appCompat)
     implementation(Libraries.ktxCore)
-    implementation(Libraries.constraintLayout)
-    implementation(Libraries.legacySupport)
-    implementation(Libraries.lifecycleLiveData)
-    implementation(Libraries.lifecycleViewmodel)
     testImplementation(TestLibraries.junit4)
     androidTestImplementation(TestLibraries.junit)
     androidTestImplementation(TestLibraries.espresso)
-    implementation(Libraries.recyclerView)
-
-    implementation(Libraries.navigationFragment)
-    implementation(Libraries.navigationUi)
-
-    implementation(Libraries.material)
 
     implementation(Libraries.composeActivity)
     implementation(Libraries.composeAnimation)
