@@ -211,7 +211,8 @@ fun FavoriteList(
                 unfocusedIndicatorColor = Color.Transparent,
                 backgroundColor = primaryLightColor
             ),
-            label = { Text(text = "Geben Sie ein Wort ein") }
+            label = { Text(text = "Geben Sie ein Wort ein") },
+            singleLine = true
         )
         Card(
             modifier = Modifier
@@ -255,7 +256,8 @@ fun VerbList(
                 unfocusedIndicatorColor = Color.Transparent,
                 backgroundColor = primaryLightColor
             ),
-            label = { Text(text = "Geben Sie ein Wort ein") }
+            label = { Text(text = "Geben Sie ein Wort ein") },
+            singleLine = true
         )
         Card(
             modifier = Modifier
