@@ -1,7 +1,6 @@
 package com.gumsiz.words.ui.detayf
 
 import android.annotation.SuppressLint
-import android.text.Html
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.UnderlineSpan
@@ -14,6 +13,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
@@ -28,6 +28,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.words.ui.theme.WordsTheme
 import org.koin.androidx.compose.koinViewModel
@@ -35,7 +37,7 @@ import java.util.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun DetailScreen(wordId: String = "") {
+fun DetailScreen(wordId: String = "", navController: NavController) {
     val viewModel = koinViewModel<DetailViewModel>()
     val favorite by viewModel.favUpdate.observeAsState()
     val wordDB by viewModel.getVerb(wordId).collectAsState()
@@ -43,7 +45,22 @@ fun DetailScreen(wordId: String = "") {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Verben", color = Color.Black) },
+                title = {
+                    Text(text = wordDB?.name?.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }
+                        ?: "Verben")
+                },
+                navigationIcon = {
+                    IconButton(onClick = { navController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                },
                 actions = {
                     IconButton(
                         onClick = {
@@ -70,6 +87,7 @@ fun DetailScreen(wordId: String = "") {
                         }
                     }
                 },
+                contentColor = Color.Black
             )
         },
         content = {
@@ -81,12 +99,8 @@ fun DetailScreen(wordId: String = "") {
                     .verticalScroll(rememberScrollState())
             ) {
                 val openDialog = remember { mutableStateOf(false) }
-                wordDB?.let {
-                    val word = it
-                    Text(
-                        text = word.name.uppercase(Locale.getDefault()),
-                        style = MaterialTheme.typography.h5
-                    )
+                wordDB?.let { word ->
+                    Spacer(modifier = Modifier.padding(4.dp))
                     DetailBox("Übersetzung", true, openDialog = { openDialog.value = true }) {
                         Translate(
                             word = word
@@ -157,8 +171,8 @@ fun DetailBox(
 @Composable
 fun Translate(word: WordModel) {
     Column {
-        for (i in word.translation) {
-            val text = "- " + Html.fromHtml(i)
+        for (translation in word.translation) {
+            val text = "- $translation"
             Text(text = text, modifier = Modifier.padding(bottom = 4.dp))
         }
     }
@@ -233,8 +247,8 @@ fun Conjugation(word: WordModel) {
 @Composable
 fun Structure(word: WordModel) {
     Column {
-        for (i in word.structure!!) {
-            val text = "- " + Html.fromHtml(i)
+        for (structure in word.structure!!) {
+            val text = "- $structure"
             Text(text = text)
         }
     }
@@ -244,7 +258,7 @@ fun Structure(word: WordModel) {
 fun Examples(word: WordModel) {
     Column {
         for (i in word.sampleSentence!!) {
-            var text = ""
+            var text: String
             val text1 = ""
             if (i!!.trim().isNotEmpty()) {
                 val wordSample = i.trim().replace("&#8211;", " - ", false)
@@ -324,6 +338,9 @@ fun TranslateAddDialog(
 @Composable
 fun DetailScreenPreview() {
     WordsTheme {
-        DetailScreen()
+        DetailScreen(
+            wordId = "",
+            navController = rememberNavController()
+        )
     }
 }
