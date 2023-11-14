@@ -56,7 +56,6 @@ dependencies {
     debugImplementation(Libraries.composeUiTooling)
     implementation(Libraries.composeViewmodel)
     implementation(Libraries.composeRuntime)
-    implementation(Libraries.composeRuntimeLivedata)
     implementation(Libraries.composeNavigation)
     implementation(Libraries.koin_android_compose)
     implementation(Libraries.koin_android)

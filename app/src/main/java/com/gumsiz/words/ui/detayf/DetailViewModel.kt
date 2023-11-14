@@ -1,13 +1,13 @@
 package com.gumsiz.words.ui.detayf
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.gumsiz.shared.data.Repository
 import com.gumsiz.shared.data.model.WordModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flow
@@ -32,20 +32,19 @@ class DetailViewModel(
         }
     }
 
-    fun getVerb(key: String): StateFlow<WordModel?> = flow {
+    fun getVerb(key: String): SharedFlow<WordModel?> = flow {
         emit(wordRepository.getWordFromDB(key))
     }.stateIn(scope, SharingStarted.Eagerly, null)
 
 
-    private val _favUpdate = MutableLiveData<Int>()
-    val favUpdate: LiveData<Int>
+    private val _favUpdate = MutableStateFlow(false)
+    val favUpdate: StateFlow<Boolean>
         get() = _favUpdate
 
     fun addFav(wordDB: WordModel) {
         scope.launch {
-            //database.update(wordDB)
-            if (wordDB.favorite) _favUpdate.value = 1 else _favUpdate.value = 2
             wordRepository.updateFavoriteStateInDB(wordDB)
+            _favUpdate.value = wordDB.favorite
         }
     }
 

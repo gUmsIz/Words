@@ -60,8 +60,6 @@ object Libraries {
     const val composeUiTooling = "androidx.compose.ui:ui-tooling:${Versions.compose}"
     const val composeUiToolingPrev = "androidx.compose.ui:ui-tooling-preview:${Versions.compose}"
     const val composeRuntime = "androidx.compose.runtime:runtime:${Versions.compose}"
-    const val composeRuntimeLivedata =
-        "androidx.compose.runtime:runtime-livedata:${Versions.compose}"
 
     // Integration with ViewModels
     const val composeViewmodel =

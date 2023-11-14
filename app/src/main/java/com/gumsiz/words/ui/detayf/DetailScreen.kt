@@ -20,7 +20,6 @@ import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,8 +38,8 @@ import java.util.*
 @Composable
 fun DetailScreen(wordId: String = "", navController: NavController) {
     val viewModel = koinViewModel<DetailViewModel>()
-    val favorite by viewModel.favUpdate.observeAsState()
-    val wordDB by viewModel.getVerb(wordId).collectAsState()
+    val favorite by viewModel.favUpdate.collectAsState()
+    val wordDB by viewModel.getVerb(wordId).collectAsState(null)
 
     Scaffold(
         topBar = {
@@ -70,18 +69,10 @@ fun DetailScreen(wordId: String = "", navController: NavController) {
                             }
                         },
                     ) {
-                        if (favorite == null) {
-                            wordDB?.let {
-                                Icon(
-                                    imageVector = if (it.favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                    tint = if (it.favorite) Color.Red else Color.Black,
-                                    contentDescription = ""
-                                )
-                            }
-                        } else {
+                        wordDB?.let {
                             Icon(
-                                imageVector = if (favorite == 1) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
-                                tint = if (favorite == 1) Color.Red else Color.Black,
+                                imageVector = if (favorite) Icons.Default.Favorite else Icons.Default.FavoriteBorder,
+                                tint = if (favorite) Color.Red else Color.Black,
                                 contentDescription = ""
                             )
                         }
