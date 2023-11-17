@@ -20,13 +20,10 @@ class Repository(
 
     val verbListFavorite : CommonFlow<List<WordModel?>> = database.verbListFavorite.asCommonFlow()
     suspend fun loadAllData(){
-        println("Verbs load all data started")
         val hasData = database.getHasDataLoaded()
         if (hasData) return
         val verbList = networkService.getData()
-        println("Verbs loaded")
         database.addAllItems(verbList.toDBData())
-        println("Verbs added to DB")
         database.setDataLoaded(true)
     }
 
