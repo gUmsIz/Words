@@ -49,6 +49,8 @@ class DataBaseImpl(private val realm: Realm) : Database {
                         wordDatabaseModel.sampleSentence?.replace("&#8220;", "“")
                     wordDatabaseModel.sampleSentence =
                         wordDatabaseModel.sampleSentence?.replace("&#8220;", "–")
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8211;", "–")
                     copyToRealm(wordDatabaseModel)
                 }
             }
