@@ -337,6 +337,7 @@
 				);
 				INFOPLIST_FILE = Verben/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Verben;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -370,6 +371,7 @@
 				);
 				INFOPLIST_FILE = Verben/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = Verben;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.education";
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
