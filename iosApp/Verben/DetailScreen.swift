@@ -57,7 +57,7 @@ struct Translation: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Text("Übersetzung")
+                Text(Texts.translation)
                     .padding()
                     .background(Colors.primaryColor)
                     .overlay(
@@ -81,10 +81,10 @@ struct Translation: View {
                     .onTapGesture {
                         isDialogVisible.toggle()
                     }
-                    .alert("Add Translation",isPresented: $isDialogVisible){
-                        TextField("New translation", text: $translation).textInputAutocapitalization(.never)
+                    .alert(Texts.addTranslation,isPresented: $isDialogVisible){
+                        TextField(Texts.newTranslation, text: $translation).textInputAutocapitalization(.never)
                             .padding(.horizontal)
-                        Button("Add", action: {
+                        Button(Texts.add, action: {
                             if !translation.isEmpty {
                                 wordModel?.translation.add(translation)
                                 viewModel.updateFavState(wordModel: wordModel)
@@ -92,7 +92,7 @@ struct Translation: View {
                                 isDialogVisible = false
                             }
                         })
-                        Button("Cancel", role: .cancel) { }
+                        Button(Texts.cancel, role: .cancel) { }
                     }
                 
                 
@@ -132,7 +132,7 @@ struct Konjugation: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Text("Konjuagtionen")
+                Text(Texts.conjugation)
                     .padding()
                     .background(Colors.primaryColor)
                     .overlay(
@@ -142,12 +142,12 @@ struct Konjugation: View {
                 Spacer()
             }
             VStack(alignment: .leading){
-                Text("Ich \(wordModel?.firstSg ?? "")")
-                Text("Du \(wordModel?.secondSg ?? "")")
-                Text("\(wordModel?.imp ?? "") (Imperativ)")
-                Text("Ich / Er-Sie-Es \(wordModel?.pret ?? "") (Prät.)")
-                Text("Ich habe \(wordModel?.perfSg ?? "") (Perf.)")
-                Text("\(wordModel?.konj2FSg ?? "") (Konjunktiv 2)")
+                Text("\(Texts.i) \(wordModel?.firstSg ?? "")")
+                Text("\(Texts.you) \(wordModel?.secondSg ?? "")")
+                Text("\(wordModel?.imp ?? "") \(Texts.imperative)")
+                Text("\(Texts.i) / \(Texts.heSheIt) \(wordModel?.pret ?? "") \(Texts.presentPerfect)")
+                Text("\(Texts.i) \(Texts.have) \(wordModel?.perfSg ?? "") \(Texts.past)")
+                Text("\(wordModel?.konj2FSg ?? "") \(Texts.pastPerfect)")
             }.padding([.leading , .bottom])
         }
         .roundedBorder(color:Colors.primaryLightColor)
@@ -160,7 +160,7 @@ struct Structure: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Text("Strukturen")
+                Text(Texts.structure)
                     .padding()
                     .background(Colors.primaryColor)
                     .overlay(
@@ -192,7 +192,7 @@ struct Samples: View {
     var body: some View {
         VStack(alignment: .leading){
             HStack{
-                Text("Beispiele")
+                Text(Texts.samples)
                     .padding()
                     .background(Colors.primaryColor)
                     .overlay(

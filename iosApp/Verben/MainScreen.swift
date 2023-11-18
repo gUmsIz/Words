@@ -17,7 +17,7 @@ struct MainScreen: View {
                         VStack{
                             HStack {
                                 HStack {
-                                    Text("Verben")
+                                    Text(Texts.appName)
                                 }
                                 .frame(minWidth: 0, maxWidth:.infinity)
                                 .contentShape(.rect)
@@ -47,7 +47,7 @@ struct MainScreen: View {
                         }
                         .background(Colors.primaryColor.edgesIgnoringSafeArea(.all))
                         
-                        TextField("Geben Sie ein Wort ein", text: $viewModel.searchText)
+                        TextField(Texts.textFieldHint, text: $viewModel.searchText)
                             .padding(.horizontal)
                             .textInputAutocapitalization(.never)
                             .frame(height: 48)
@@ -58,26 +58,26 @@ struct MainScreen: View {
                         case 0: VerListView()
                         case 1: FavVerListView()
                         default:
-                            Text("Second")
+                            Text("")
                         }
                     }
                     .toolbar{
                         ToolbarItem(placement: .topBarLeading) {
-                            Text("Verben")
+                            Text(Texts.appName)
                         }
                         ToolbarItem(placement: .topBarTrailing){
                             Menu {
-                                Button("Über App") {
+                                Button(Texts.about) {
                                     isDialogVisible.toggle()
                                 }
                             } label: {
                                 Image(systemName: "ellipsis").foregroundColor(.black)
-                            }.alert("Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für Erwachsene)",isPresented: $isDialogVisible){
-                                Button("Ok",role:.cancel) {
+                            }.alert(Texts.aboutInfo,isPresented: $isDialogVisible){
+                                Button(Texts.ok,role:.cancel) {
                                     
                                 }
-                                Button("d-seite.de") {
-                                    openURL(URL(string: "https://d-seite.de")!)
+                                Button(Texts.urlButton) {
+                                    openURL(URL(string: Texts.url)!)
                                 }
                             }
                         }
@@ -135,7 +135,7 @@ struct FavVerListView: View {
 struct LoadingView: View {
     var body: some View{
         VStack(alignment:.center){
-            Text("Vorbereitung für den ersten Gebrauch")
+            Text(Texts.preparationInfo)
             ProgressView()
         }
         .padding()
