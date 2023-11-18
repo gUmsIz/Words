@@ -98,7 +98,7 @@ struct VerListView: View {
                         NavigationLink(destination: DetailScreen(
                             wordModel: wordModel)){
                                 Text(wordModel.name)
-                            }
+                            }.navigationTitle("")
                     }.foregroundColor(.black)
                 }
             }
