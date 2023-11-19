@@ -71,7 +71,7 @@ struct MainScreen: View {
                                     isDialogVisible.toggle()
                                 }
                             } label: {
-                                Image(systemName: "ellipsis").foregroundColor(.black)
+                                Image(systemName: "ellipsis").foregroundColor(Colors.darkWhiteLightBlackColor)
                             }.alert(Texts.aboutInfo,isPresented: $isDialogVisible){
                                 Button(Texts.ok,role:.cancel) {
                                     
@@ -99,7 +99,7 @@ struct VerListView: View {
                             wordModel: wordModel)){
                                 Text(wordModel.name)
                             }.navigationTitle("")
-                    }.foregroundColor(.black)
+                    }
                 }
             }
             .padding(.leading)
@@ -121,7 +121,7 @@ struct FavVerListView: View {
                             wordModel: wordModel)){
                                 Text(wordModel.name)
                             }
-                    }.foregroundColor(.black)
+                    }
                 }
             }
             .padding(.leading)

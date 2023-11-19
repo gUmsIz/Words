@@ -11,7 +11,7 @@ struct ContentView: View {
         }
         .navigationViewStyle(.stack)
         .environmentObject(viewModel)
-        .tint(.black)
+        .tint(Colors.darkWhiteLightBlackColor)
     }
     
     struct ContentView_Previews: PreviewProvider {

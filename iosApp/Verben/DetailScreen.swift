@@ -30,7 +30,7 @@ struct DetailScreen: View {
                 Image(systemName: wordModel!.favorite ? "heart.fill":"heart")
                     .contentTransition(.symbolEffect(.replace))
                     .padding(.trailing).foregroundColor(
-                        wordModel!.favorite ? Color.red:Color.black
+                        wordModel!.favorite ? Color.red:Colors.darkWhiteLightBlackColor
                     )
                     .onTapGesture {
                         withAnimation {
