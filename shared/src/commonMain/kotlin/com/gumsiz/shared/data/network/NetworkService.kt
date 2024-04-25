@@ -5,7 +5,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.serialization.json.Json
-
+//TODO enable client
+const val apiUrl = ""
 val mockData = """
     [
                 { "name":"abbiegen", "cekim_1":"biege ab", "cekim_2":"biegst ab", "imp":"bieg ab", "pret":"bog ab", "perf":"bin abgebogen", "konj":"b\u00f6ge ab", "struktur":["(nach) RICHTUNG \/ AUF WEG \/ VON WEG"], "beispiel":["Fahr langsamer, du musst gleich abbiegen!", "An der Kreuzung da vorne musst du (nach) rechts abbiegen.", "Bieg hier mal (nach) rechts ab. Ich kenne eine Abk\u00fcrzung.", "Da vorne musst du (nach) links in die Goethestra\u00dfe abbiegen.", "", "Noch etwa 10 Kilometer, dann m\u00fcssen wir von der Autobahn abbiegen.", ""] },
@@ -38,7 +39,9 @@ interface NetworkService {
 class NetworkServiceImp(private val client: HttpClient) : NetworkService {
 
     override suspend fun getData() =
-        //TODO enable client
-        //Json.decodeFromString<List<WordNetworkModel>>(mockData)
-        client.get("http://gumsiz.hol.es/connect.php").body<List<WordNetworkModel>>()
+        if (apiUrl.isNotEmpty()){
+            client.get(apiUrl).body<List<WordNetworkModel>>()
+        }else{
+            Json.decodeFromString<List<WordNetworkModel>>(mockData)
+        }
 }

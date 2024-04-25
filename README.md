@@ -2,8 +2,9 @@
 Mobile App written for Most used Verbs in German.
 
 Started as a weekend fun project for a Java Android dev curious about Kotlin (which is my favorite now!). 
-After a while, it also became my playground for me to explore new declarative frameworks, Jetpack Compose 
-and SwiftUI, after working professionally with Flutter. Kotlin Multiplatform Mobile (KMM) allows me to use 
+After a while, it also became a playground for me to explore new declarative frameworks, Jetpack Compose 
+and SwiftUI, after working professionally with Flutter. 
+Kotlin Multiplatform Mobile (KMM) allows me to use 
 both Jetpack Compose and SwiftUI in a single codebase, instead of having to develop them separately. 
 In this branch, the business logic is implemented in Kotlin and shared between both Jetpack Compose 
 and SwiftUI.
