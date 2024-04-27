@@ -5,7 +5,7 @@ Weekend fun while learning German :)
 
 Written in Kotlin 
 
-MVVM Architectur used.
+MVVM Architecture used.
 
 Any contribution is welcomed :)
 
