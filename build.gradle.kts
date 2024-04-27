@@ -1,27 +1,6 @@
-// Top-level build file where you can add configuration options common to all sub-projects/modules.
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-
-    }
-    dependencies {
-        classpath(BuildPlugins.androidGradlePlugin)
-        classpath(BuildPlugins.kotlinGradlePlugin)
-        classpath(BuildPlugins.navigationGradlePlugin)
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
-}
-
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-
-    }
-}
-tasks.register("clean").configure {
-    delete("build")
+plugins {
+    id(BuildPlugins.androidApplication) version BuildPlugins.Versions.buildToolsVersion apply false
+    id(BuildPlugins.androidLibrary) version BuildPlugins.Versions.buildToolsVersion apply false
+    kotlin(BuildPlugins.kotlinAndroid) version kotlinVersion apply false
+    kotlin(BuildPlugins.multiplatform) version kotlinVersion apply false
 }

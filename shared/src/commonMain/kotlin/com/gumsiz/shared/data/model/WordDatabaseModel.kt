@@ -6,7 +6,7 @@ import org.mongodb.kbson.ObjectId
 
 class WordDatabaseModel() : RealmObject {
     @PrimaryKey
-    var _id: ObjectId = ObjectId()
+    var id: ObjectId = ObjectId()
     var name: String = ""
     var translation: String? = null
     var firstSg: String? = null

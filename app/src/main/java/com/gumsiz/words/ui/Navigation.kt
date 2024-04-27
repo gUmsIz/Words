@@ -32,7 +32,8 @@ fun VerbenNavigation(){
 
             it.arguments?.getString("word")?.let { it1 ->
                 DetailScreen(
-                    it1
+                    wordId = it1,
+                    navController = navController
                 )
             }
         }

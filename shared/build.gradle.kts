@@ -1,13 +1,21 @@
 plugins {
     kotlin(BuildPlugins.multiplatform)
-    kotlin(BuildPlugins.serialization) version kotlinVersion
     id(BuildPlugins.androidLibrary)
+    kotlin(BuildPlugins.serialization) version kotlinVersion
     id(BuildPlugins.realm) version realmKotlinVersion
 }
 
 @OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    androidTarget()
+    targetHierarchy.default()
+
+    androidTarget {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
     
     listOf(
         iosX64(),
@@ -31,19 +39,20 @@ kotlin {
                 api(Libraries.koin_core)
             }
         }
+        val commonTest by getting {
+            dependencies {
+                //implementation(libs.kotlin.test)
+            }
+        }
         val androidMain by getting {
             dependencies {
                 implementation(Libraries.ktor_client_android)
             }
         }
-        val commonTest by getting {
-            dependencies {
-            }
-        }
         val iosX64Main by getting
         val iosArm64Main by getting
         val iosSimulatorArm64Main by getting
-        val iosMain by creating{
+        val iosMain by getting{
             dependsOn(commonMain)
             iosX64Main.dependsOn(this)
             iosArm64Main.dependsOn(this)
@@ -57,8 +66,8 @@ kotlin {
 
 android {
     namespace = "com.gumsiz.shared"
-    compileSdk = AndroidSdk.compileSdk
+    compileSdk = 34
     defaultConfig {
-        minSdk = AndroidSdk.minSdk
+        minSdk = 24
     }
 }

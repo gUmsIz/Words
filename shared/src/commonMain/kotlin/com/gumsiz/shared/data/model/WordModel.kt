@@ -11,8 +11,8 @@ data class WordModel(
     val pret: String?,
     val perfSg: String?,
     val konj2FSg: String?,
-    val structure: Array<String?>?,
-    val sampleSentence: Array<String?>?,
+    val structure: List<String?>?,
+    val sampleSentence: List<String?>?,
     var favorite: Boolean
 )
 
@@ -28,8 +28,8 @@ fun WordDatabaseModel.toWordModel(): WordModel? {
             this.pret,
             this.perfSg,
             this.konj2FSg,
-            this.structur?.let { Json.decodeFromString<Array<String?>>(it) },
-            this.sampleSentence?.let { Json.decodeFromString<Array<String?>>(it) },
+            this.structur?.let { Json.decodeFromString<List<String?>>(it) },
+            this.sampleSentence?.let { Json.decodeFromString<List<String?>>(it) },
             this.favorite
         )
     }

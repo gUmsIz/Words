@@ -1,5 +1,6 @@
 package com.gumsiz.shared.data.db
 
+import com.gumsiz.shared.data.model.SettingDatabaseModel
 import com.gumsiz.shared.data.model.WordDatabaseModel
 import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.shared.data.model.toWordModel
@@ -10,14 +11,18 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 interface Database {
     val verbList: Flow<List<WordModel?>>
     val verbListFavorite: Flow<List<WordModel?>>
     suspend fun addAllItems(words: List<WordDatabaseModel>)
-    suspend fun update(name: String)
+    suspend fun update(wordModel: WordModel)
     suspend fun getVerb(name: String): WordModel?
     suspend fun searchInVerbs(searchQuery: String): Flow<List<WordModel?>>
+    suspend fun getHasDataLoaded(): Boolean
+    suspend fun setDataLoaded(isDataLoaded: Boolean)
 }
 
 class DataBaseImpl(private val realm: Realm) : Database {
@@ -37,18 +42,28 @@ class DataBaseImpl(private val realm: Realm) : Database {
     override suspend fun addAllItems(words: List<WordDatabaseModel>) {
         CoroutineScope(Dispatchers.Default).launch {
             realm.write {
-                words.map {
-                    copyToRealm(it)
+                words.map { wordDatabaseModel ->
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8222;", "„")
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8220;", "“")
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8220;", "–")
+                    wordDatabaseModel.sampleSentence =
+                        wordDatabaseModel.sampleSentence?.replace("&#8211;", "–")
+                    copyToRealm(wordDatabaseModel)
                 }
             }
         }
     }
 
-    override suspend fun update(name: String) {
+    override suspend fun update(wordModel: WordModel) {
         CoroutineScope(Dispatchers.Default).launch {
             realm.write {
-                val wordInDB = this.query<WordDatabaseModel>("name==$0", name).find().first()
-                wordInDB.favorite = !wordInDB.favorite
+                val wordInDB =
+                    this.query<WordDatabaseModel>("name==$0", wordModel.name).find().first()
+                wordInDB.favorite = wordModel.favorite
+                wordInDB.translation = Json.encodeToString(wordModel.translation)
             }
         }
     }
@@ -59,6 +74,27 @@ class DataBaseImpl(private val realm: Realm) : Database {
     override suspend fun searchInVerbs(searchQuery: String) = flow {
         realm.query<WordDatabaseModel>("name TEXT $0", searchQuery).find().asFlow().collect {
             emit(it.list.map { it.toWordModel() })
+        }
+    }
+
+    override suspend fun getHasDataLoaded(): Boolean =
+        try {
+            realm.query<SettingDatabaseModel>().find().first().dataLoaded
+        } catch (e: NoSuchElementException) {
+            false
+        }
+
+    override suspend fun setDataLoaded(isDataLoaded: Boolean) {
+        CoroutineScope(Dispatchers.Default).launch {
+            realm.write {
+                val settings = try {
+                    realm.query<SettingDatabaseModel>().find().first().dataLoaded
+                } catch (e: NoSuchElementException) {
+                    null
+                }
+                if (settings == null) copyToRealm(SettingDatabaseModel(dataLoaded = isDataLoaded)) else (settings as SettingDatabaseModel).dataLoaded =
+                    isDataLoaded
+            }
         }
     }
 }
