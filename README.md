@@ -14,7 +14,9 @@ and SwiftUI.
 
 Any contribution is welcomed :)
 
-You can also try from <a href="https://play.google.com/store/apps/details?id=com.gumsiz.words">here</a>
+You can also try:
+    <a href="https://play.google.com/store/apps/details?id=com.gumsiz.words">Android</a>
+ & <a href="https://apps.apple.com/de/app/t%C3%A4glich-verben/id6472603829">iOS</a>
 
 All data used in App is from <a href="http://www.d-seite.de/">"Verben im Satz"</a> with permission of the Author.
 
