@@ -1,13 +1,17 @@
 package com.gumsiz.words.ui
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import com.gumsiz.words.databinding.ActivityMainBinding
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import com.gumsiz.words.ui.theme.WordsTheme
+
+class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding=ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContent {
+            WordsTheme {
+                VerbenNavigation()
+            }
+        }
     }
 }

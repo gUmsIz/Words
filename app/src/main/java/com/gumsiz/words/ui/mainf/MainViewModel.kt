@@ -1,70 +1,64 @@
 package com.gumsiz.words.ui.mainf
 
-import android.app.Application
-import android.content.Context
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import com.gumsiz.words.R
-import com.gumsiz.words.data.Word
-import com.gumsiz.words.data.WordRepository
-import com.gumsiz.words.data.db.WordsDAO
-import com.gumsiz.words.data.utils.Resource
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.gumsiz.shared.data.Repository
+import com.gumsiz.words.utils.Resource
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
 import java.lang.Exception
 
-class MainViewModel(database: WordsDAO, application: Application) :
-    AndroidViewModel(application) {
-    //CoroutineJOB
-    private var viewModelJob = Job()
+//TODO get rid of livedata
+@OptIn(FlowPreview::class, ExperimentalCoroutinesApi::class)
+class MainViewModel(private val wordRepository: Repository) :
+    ViewModel() {
 
-    val msg = application.getString(R.string.load_message)
+    val searchQuery = MutableStateFlow("")
+    val searchQueryInFavorite = MutableStateFlow("")
+    val allVerbsList = searchQuery.debounce(250).flatMapLatest { searchQuery ->
+        wordRepository.verbList.mapLatest { verbList ->
+            verbList.filter {
+                it!!.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
+    val favoriteVerbsList = searchQueryInFavorite.debounce(250).flatMapLatest { searchQuery ->
+        wordRepository.verbListFavorite.mapLatest { favoriteVerbList ->
+            favoriteVerbList.filter {
+                it!!.name.contains(searchQuery, ignoreCase = true)
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
-    // Coroutine Scope
-    private val scope = CoroutineScope(Dispatchers.Main + viewModelJob)
-
-    val repository = WordRepository(database, application)
-
-    val sData = application.getSharedPreferences("data", Context.MODE_PRIVATE)
-
-
-    //List of words from db
-    //private var _data = repository.wordlist as MutableLiveData<List<Word>>
-
-    val data: LiveData<List<Word>> = repository.wordList
-    val favoritedata: LiveData<List<Word>> = repository.wordListFav
-    //get() = _data
+    val dataStateFlow = MutableStateFlow(Resource.loading(data = "null", message = ""))
 
     init {
         prepare()
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        viewModelJob.cancel()
+    fun searchInList(text: String) {
+        searchQuery.value = text
     }
 
-    fun update() {
-        sData.edit().putBoolean("dataLoaded", false).apply()
-        prepare()
+    fun searchInFavList(text: String) {
+        searchQueryInFavorite.value = text
     }
 
 
-    fun prepare() = liveData(Dispatchers.IO) {
-        if (!sData.getBoolean("dataLoaded", false)) {
-            emit(Resource.loading(data = null, message = msg))
+    private fun prepare() {
+        viewModelScope.launch {
             try {
-                // From Api activate this method instead of MockData
-                //repository.getDataFromServer()
-                repository.getDataFromMockServer()
-                sData.edit().putBoolean("dataLoaded", true).apply()
-                emit(Resource.success(data = null))
-
+                wordRepository.loadAllData()
+                dataStateFlow.value = Resource.success(data = "null")
             } catch (exception: Exception) {
-                emit(Resource.error(data = null, message = exception.message ?: "Error Occured!"))
+                dataStateFlow.value =
+                    Resource.error(data = null, message = exception.message ?: "Error Occured!")
             }
-        } else {
-            emit(Resource.success(data = null))
         }
     }
 
