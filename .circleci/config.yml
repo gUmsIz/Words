@@ -11,6 +11,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: java version
+          command: java --version
+      - run:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
