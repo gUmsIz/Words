@@ -10,6 +10,8 @@ jobs:
       tag: default
     steps:
       - checkout
+      - android/change-java-version:
+          java-version: 17
       - run:
           name: java version
           command: java --version
