@@ -1,11 +1,11 @@
-const val kotlinVersion = "1.9.10"
+const val kotlinVersion = "1.9.20"
 const val realmKotlinVersion = "1.11.0"
 
 object BuildPlugins {
 
     object Versions {
         const val buildToolsVersion = "8.1.4"
-        const val composeCompilerVersin = "1.5.3"
+        const val composeCompilerVersin = "1.5.4"
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
