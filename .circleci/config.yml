@@ -1,25 +1,26 @@
 version: 2.1
+orbs:
+  android: circleci/android@2.5.0
 jobs:
   build:
     working_directory: ~/code
-    docker:
-      - image: circleci/android:api-30
-    environment:
-      JVM_OPTS: -Xmx3200m
+    executor:
+      name: android/android-machine
+      resource-class: large
+      tag: default
     steps:
       - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
+      - android/change-java-version:
+          java-version: 17
+      - run:
+          name: java version
+          command: java --version
       - run:
           name: chmod permissions
           command: chmod +x ./gradlew
       - run:
           name: Download Dependencies
           command: ./gradlew androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle" }}-{{ checksum "app/build.gradle" }}
       - run:
           name: Run Tests
           command: ./gradlew lint test
