@@ -5,7 +5,7 @@ object BuildPlugins {
 
     object Versions {
         const val buildToolsVersion = "8.1.4"
-        const val composeCompilerVersin = "1.5.4"
+        const val composeCompilerVersin = "1.5.5"
     }
 
     const val androidGradlePlugin = "com.android.tools.build:gradle:${Versions.buildToolsVersion}"
@@ -32,7 +32,8 @@ object Libraries {
         const val ktx = "1.7.0"
         const val lifecycle = "2.6.0"
         const val compose_activity = "1.8.0"
-        const val compose = "1.5.4"
+        const val compose = "1.8.3"
+        const val compose_material = "1.5.4"
         const val compose_view_model = "1.0.0-alpha07"
         const val compose_nav = "2.5.0"
         const val koin = "3.4.0"
@@ -50,7 +51,7 @@ object Libraries {
     const val composeActivity = "androidx.activity:activity-compose:${Versions.compose_activity}"
 
     // Compose Material Design
-    const val composeMaterial = "androidx.compose.material:material:${Versions.compose}"
+    const val composeMaterial = "androidx.compose.material:material:${Versions.compose_material}"
 
     // Animations
     const val composeAnimation = "androidx.compose.animation:animation:${Versions.compose}"

@@ -2,9 +2,9 @@ package com.gumsiz.words.ui.mainf
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -34,6 +34,7 @@ import com.gumsiz.words.ui.Screen
 import com.gumsiz.words.ui.theme.WordsTheme
 import com.gumsiz.words.ui.theme.primaryLightColor
 import org.koin.androidx.compose.koinViewModel
+import androidx.core.net.toUri
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -41,6 +42,11 @@ fun MainScreen(navController: NavController) {
     val mainViewModel = koinViewModel<MainViewModel>()
     val openDialog = remember { mutableStateOf(false) }
     Scaffold(
+        modifier = Modifier
+            .background(MaterialTheme.colors.primary)
+            .padding(
+            WindowInsets.statusBars.asPaddingValues()
+        ),
         topBar = {
             TopAppBar(
                 title = { Text(text = "Verben", color = Color.Black) },
@@ -74,7 +80,7 @@ fun MainScreen(navController: NavController) {
             )
         },
         content = {
-            var state by remember { mutableStateOf(0) }
+            var state by remember { mutableIntStateOf(0) }
             val newData: List<WordModel?> by mainViewModel.allVerbsList.collectAsState(initial = emptyList())
             val newFavData: List<WordModel?> by mainViewModel.favoriteVerbsList.collectAsState(initial = emptyList())
             val verbData by mainViewModel.dataStateFlow.collectAsState()
@@ -306,7 +312,7 @@ fun InfoDialog(dismiss: () -> Unit) {
                 TextButton(onClick = {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("http://www.d-seite.de/vis/hinweise.html")
+                        "http://www.d-seite.de/vis/hinweise.html".toUri()
                     )
                     startActivity(context, intent, null)
                 }) {

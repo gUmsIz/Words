@@ -10,13 +10,14 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.*
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,6 +43,11 @@ fun DetailScreen(wordId: String = "", navController: NavController) {
     val wordDB by viewModel.getVerb(wordId).collectAsState(null)
 
     Scaffold(
+        modifier = Modifier
+            .background(MaterialTheme.colors.primary)
+            .padding(
+                WindowInsets.statusBars.asPaddingValues()
+            ),
         topBar = {
             TopAppBar(
                 title = {

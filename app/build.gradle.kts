@@ -5,13 +5,13 @@ plugins {
 
 android {
     namespace = "com.gumsiz.words"
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "com.gumsiz.words"
         minSdk = 24
-        targetSdk = 35
-        versionCode = 7
-        versionName = "1.4"
+        targetSdk = 36
+        versionCode = 8
+        versionName = "1.5"
     }
     buildFeatures {
         compose = true
