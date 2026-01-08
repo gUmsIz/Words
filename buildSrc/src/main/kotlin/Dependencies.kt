@@ -1,10 +1,10 @@
-const val kotlinVersion = "1.9.20"
-const val realmKotlinVersion = "1.11.0"
+const val kotlinVersion = "2.0.20"
+const val realmKotlinVersion = "3.0.0"
 
 object BuildPlugins {
 
     object Versions {
-        const val buildToolsVersion = "8.1.4"
+        const val buildToolsVersion = "8.13.2"
         const val composeCompilerVersin = "1.5.5"
     }
 
@@ -18,6 +18,7 @@ object BuildPlugins {
     const val multiplatform = "multiplatform"
     const val serialization = "plugin.serialization"
     const val realm = "io.realm.kotlin"
+    const val composePlugin = "org.jetbrains.kotlin.plugin.compose"
 
 }
 
@@ -38,7 +39,7 @@ object Libraries {
         const val compose_nav = "2.5.0"
         const val koin = "3.4.0"
         const val koin_compose = "3.4.3"
-        const val realm_kotlin_base = "1.11.0"
+        const val realm_kotlin_base = "3.0.0"
         const val coroutine_core = "1.7.3"
         const val serialization = "1.6.0"
         const val ktor = "2.3.5"

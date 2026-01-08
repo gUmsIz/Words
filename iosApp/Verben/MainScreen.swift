@@ -61,8 +61,9 @@ struct MainScreen: View {
                             Text("")
                         }
                     }
+                    .toolbarRole(.browser)
                     .toolbar{
-                        ToolbarItem(placement: .topBarLeading) {
+                        ToolbarItem(placement: .title) {
                             Text(Texts.appName)
                         }
                         ToolbarItem(placement: .topBarTrailing){
@@ -81,7 +82,7 @@ struct MainScreen: View {
                                 }
                             }
                         }
-                    }
+                    }.toolbarTitleDisplayMode(.inline)
                 }
             }
         }

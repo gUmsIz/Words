@@ -1,5 +1,6 @@
 plugins {
     id(BuildPlugins.androidApplication)
+    id(BuildPlugins.composePlugin) version kotlinVersion
     kotlin(BuildPlugins.kotlinAndroid)
 }
 
@@ -10,8 +11,8 @@ android {
         applicationId = "com.gumsiz.words"
         minSdk = 24
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.5"
+        versionCode = 9
+        versionName = "1.6"
     }
     buildFeatures {
         compose = true
