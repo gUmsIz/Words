@@ -1,0 +1,106 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "845be08cd98ecd87459ac4331827442a",
+    "entities": [
+      {
+        "tableName": "words",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `translation` TEXT, `firstSg` TEXT, `secondSg` TEXT, `Imp` TEXT, `pret` TEXT, `perfSg` TEXT, `konj2FSg` TEXT, `structur` TEXT, `sampleSentence` TEXT, `favorite` INTEGER NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "translation",
+            "columnName": "translation",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "firstSg",
+            "columnName": "firstSg",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "secondSg",
+            "columnName": "secondSg",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "Imp",
+            "columnName": "Imp",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "pret",
+            "columnName": "pret",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "perfSg",
+            "columnName": "perfSg",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "konj2FSg",
+            "columnName": "konj2FSg",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "structur",
+            "columnName": "structur",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "sampleSentence",
+            "columnName": "sampleSentence",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "favorite",
+            "columnName": "favorite",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "name"
+          ]
+        }
+      },
+      {
+        "tableName": "settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `dataLoaded` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dataLoaded",
+            "columnName": "dataLoaded",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '845be08cd98ecd87459ac4331827442a')"
+    ]
+  }
+}

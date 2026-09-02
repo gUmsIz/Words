@@ -1,7 +1,11 @@
 package com.gumsiz.shared.data.model
 
-import io.realm.kotlin.types.RealmObject
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 
-class SettingDatabaseModel(var dataLoaded : Boolean) : RealmObject {
-    constructor(): this(false)
-}
+@Entity(tableName = "settings")
+data class SettingDatabaseModel(
+    @PrimaryKey
+    var id: Int = 1,
+    var dataLoaded: Boolean = false
+)

@@ -4,13 +4,8 @@ import com.gumsiz.shared.data.model.SettingDatabaseModel
 import com.gumsiz.shared.data.model.WordDatabaseModel
 import com.gumsiz.shared.data.model.WordModel
 import com.gumsiz.shared.data.model.toWordModel
-import io.realm.kotlin.Realm
-import io.realm.kotlin.ext.query
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -25,76 +20,52 @@ interface Database {
     suspend fun setDataLoaded(isDataLoaded: Boolean)
 }
 
-class DataBaseImpl(private val realm: Realm) : Database {
+class DataBaseImpl(private val wordsDatabase: WordsDatabase) : Database {
+    private val wordsDao = wordsDatabase.wordsDao()
+    private val settingsDao = wordsDatabase.settingsDao()
+
     override val verbList: Flow<List<WordModel?>>
-        get() = flow {
-            realm.query<WordDatabaseModel>().find().asFlow().collect {
-                emit(it.list.map { it.toWordModel() })
-            }
+        get() = wordsDao.getAllWords().map { list ->
+            list.map { it.toWordModel() }
         }
+
     override val verbListFavorite: Flow<List<WordModel?>>
-        get() = flow {
-            realm.query<WordDatabaseModel>("favorite == $0", true).find().asFlow().collect {
-                emit(it.list.map { it.toWordModel() })
-            }
+        get() = wordsDao.getFavoriteWords().map { list ->
+            list.map { it.toWordModel() }
         }
 
     override suspend fun addAllItems(words: List<WordDatabaseModel>) {
-        CoroutineScope(Dispatchers.Default).launch {
-            realm.write {
-                words.map { wordDatabaseModel ->
-                    wordDatabaseModel.sampleSentence =
-                        wordDatabaseModel.sampleSentence?.replace("&#8222;", "„")
-                    wordDatabaseModel.sampleSentence =
-                        wordDatabaseModel.sampleSentence?.replace("&#8220;", "“")
-                    wordDatabaseModel.sampleSentence =
-                        wordDatabaseModel.sampleSentence?.replace("&#8220;", "–")
-                    wordDatabaseModel.sampleSentence =
-                        wordDatabaseModel.sampleSentence?.replace("&#8211;", "–")
-                    copyToRealm(wordDatabaseModel)
-                }
-            }
+        val sanitizedWords = words.map { word ->
+            word.copy(
+                sampleSentence = word.sampleSentence
+                    ?.replace("&#8222;", "„")
+                    ?.replace("&#8220;", "“")
+                    ?.replace("&#8211;", "–")
+            )
         }
+        wordsDao.insertAll(sanitizedWords)
     }
 
     override suspend fun update(wordModel: WordModel) {
-        CoroutineScope(Dispatchers.Default).launch {
-            realm.write {
-                val wordInDB =
-                    this.query<WordDatabaseModel>("name==$0", wordModel.name).find().first()
-                wordInDB.favorite = wordModel.favorite
-                wordInDB.translation = Json.encodeToString(wordModel.translation)
-            }
-        }
+        wordsDao.updateWord(
+            name = wordModel.name,
+            favorite = wordModel.favorite,
+            translation = Json.encodeToString(wordModel.translation)
+        )
     }
 
     override suspend fun getVerb(name: String): WordModel? =
-        realm.query<WordDatabaseModel>("name==$0", name).find().first().toWordModel()
+        wordsDao.getWord(name)?.toWordModel()
 
-    override suspend fun searchInVerbs(searchQuery: String) = flow {
-        realm.query<WordDatabaseModel>("name TEXT $0", searchQuery).find().asFlow().collect {
-            emit(it.list.map { it.toWordModel() })
+    override suspend fun searchInVerbs(searchQuery: String): Flow<List<WordModel?>> =
+        wordsDao.searchWords(searchQuery).map { list ->
+            list.map { it.toWordModel() }
         }
-    }
 
     override suspend fun getHasDataLoaded(): Boolean =
-        try {
-            realm.query<SettingDatabaseModel>().find().first().dataLoaded
-        } catch (e: NoSuchElementException) {
-            false
-        }
+        settingsDao.isDataLoaded() ?: false
 
     override suspend fun setDataLoaded(isDataLoaded: Boolean) {
-        CoroutineScope(Dispatchers.Default).launch {
-            realm.write {
-                val settings = try {
-                    realm.query<SettingDatabaseModel>().find().first().dataLoaded
-                } catch (e: NoSuchElementException) {
-                    null
-                }
-                if (settings == null) copyToRealm(SettingDatabaseModel(dataLoaded = isDataLoaded)) else (settings as SettingDatabaseModel).dataLoaded =
-                    isDataLoaded
-            }
-        }
+        settingsDao.setSettings(SettingDatabaseModel(id = 1, dataLoaded = isDataLoaded))
     }
 }
