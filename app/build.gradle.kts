@@ -1,12 +1,13 @@
 plugins {
-    id(BuildPlugins.androidApplication)
-    id(BuildPlugins.composePlugin) version kotlinVersion
-    kotlin(BuildPlugins.kotlinAndroid)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {
     namespace = "com.gumsiz.words"
     compileSdk = 36
+
     defaultConfig {
         applicationId = "com.gumsiz.words"
         minSdk = 24
@@ -14,50 +15,61 @@ android {
         versionCode = 9
         versionName = "1.6"
     }
+
     buildFeatures {
         compose = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = BuildPlugins.Versions.composeCompilerVersin
-    }
+
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
+
+    kotlin {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
+        }
     }
 }
 
 dependencies {
     implementation(projects.shared)
 
-    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation(Libraries.kotlinStdLib)
-    implementation(Libraries.ktxCore)
-    testImplementation(TestLibraries.junit4)
-    androidTestImplementation(TestLibraries.junit)
-    androidTestImplementation(TestLibraries.espresso)
+    implementation(libs.androidx.core.ktx)
 
-    implementation(Libraries.composeActivity)
-    implementation(Libraries.composeAnimation)
-    implementation(Libraries.composeMaterial)
-    implementation(Libraries.composeUi)
-    implementation(Libraries.composeUiToolingPrev)
-    debugImplementation(Libraries.composeUiTooling)
-    implementation(Libraries.composeViewmodel)
-    implementation(Libraries.composeRuntime)
-    implementation(Libraries.composeNavigation)
-    implementation(Libraries.koin_android_compose)
-    implementation(Libraries.koin_android)
+    val composeBom = platform(libs.androidx.compose.bom)
+    implementation(composeBom)
+    androidTestImplementation(composeBom)
+
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material.icons.core)
+    implementation(libs.androidx.compose.material.icons.extended)
+    implementation(libs.androidx.compose.animation)
+    implementation(libs.androidx.compose.runtime)
+
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose)
+
+    testImplementation(libs.junit4)
+    androidTestImplementation(libs.androidx.test.junit)
+    androidTestImplementation(libs.androidx.test.espresso)
 }

@@ -1,73 +1,59 @@
 plugins {
-    kotlin(BuildPlugins.multiplatform)
-    id(BuildPlugins.androidLibrary)
-    kotlin(BuildPlugins.serialization) version kotlinVersion
-    id(BuildPlugins.realm) version realmKotlinVersion
+    alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.realm.kotlin)
 }
 
-@OptIn(org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi::class)
 kotlin {
-    targetHierarchy.default()
-
     androidTarget {
-        compilations.all {
-            kotlinOptions {
-                jvmTarget = "1.8"
-            }
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
         iosSimulatorArm64()
-    ).forEach {
-        it.binaries.framework {
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
             baseName = "shared"
         }
     }
 
     sourceSets {
-        val commonMain by getting {
-            dependencies {
-                implementation(Libraries.ktor_client_core)
-                implementation(Libraries.ktor_client_cont)
-                implementation(Libraries.ktor_client_json)
-                implementation(Libraries.realm_kotlin_base)
-                implementation(Libraries.coroutine_core)
-                implementation (Libraries.serialization)
-                api(Libraries.koin_core)
-            }
+        commonMain.dependencies {
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.json)
+            implementation(libs.realm.kotlin.base)
+            implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlinx.serialization.json)
+            api(libs.koin.core)
         }
-        val commonTest by getting {
-            dependencies {
-                //implementation(libs.kotlin.test)
-            }
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
         }
-        val androidMain by getting {
-            dependencies {
-                implementation(Libraries.ktor_client_android)
-            }
+        androidMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
         }
-        val iosX64Main by getting
-        val iosArm64Main by getting
-        val iosSimulatorArm64Main by getting
-        val iosMain by getting{
-            dependsOn(commonMain)
-            iosX64Main.dependsOn(this)
-            iosArm64Main.dependsOn(this)
-            iosSimulatorArm64Main.dependsOn(this)
-            dependencies {
-                implementation(Libraries.ktor_client_native)
-            }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
         }
     }
 }
 
 android {
     namespace = "com.gumsiz.shared"
-    compileSdk = 34
+    compileSdk = 36
+
     defaultConfig {
         minSdk = 24
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 }

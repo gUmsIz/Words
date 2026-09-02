@@ -1,6 +1,9 @@
 plugins {
-    id(BuildPlugins.androidApplication) version BuildPlugins.Versions.buildToolsVersion apply false
-    id(BuildPlugins.androidLibrary) version BuildPlugins.Versions.buildToolsVersion apply false
-    kotlin(BuildPlugins.kotlinAndroid) version kotlinVersion apply false
-    kotlin(BuildPlugins.multiplatform) version kotlinVersion apply false
+    alias(libs.plugins.android.application) apply false
+    alias(libs.plugins.android.library) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.kotlin.multiplatform) apply false
+    alias(libs.plugins.kotlin.serialization) apply false
+    alias(libs.plugins.kotlin.compose) apply false
+    alias(libs.plugins.realm.kotlin) apply false
 }
