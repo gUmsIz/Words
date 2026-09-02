@@ -6,7 +6,8 @@ struct MainScreen: View {
     @Environment(\.openURL) var openURL
     @EnvironmentObject var viewModel: ViewModel
     @State private var selectedTab: Int = 0
-    @State private var isDialogVisible = false;
+    @State private var isDialogVisible = false
+    @State private var isFeedbackPresented = false
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -71,6 +72,14 @@ struct MainScreen: View {
                                 Button(Texts.about) {
                                     isDialogVisible.toggle()
                                 }
+                                Button(Texts.feedback) {
+                                    isFeedbackPresented.toggle()
+                                }
+                                Button(Texts.derDieDas) {
+                                    if let url = URL(string: Texts.derDieDasStoreUrl) {
+                                        openURL(url)
+                                    }
+                                }
                             } label: {
                                 Image(systemName: "ellipsis").foregroundColor(Colors.darkWhiteLightBlackColor)
                             }.alert(Texts.aboutInfo,isPresented: $isDialogVisible){
@@ -83,6 +92,20 @@ struct MainScreen: View {
                             }
                         }
                     }.toolbarTitleDisplayMode(.inline)
+                    .sheet(isPresented: $isFeedbackPresented) {
+                        NavigationStack {
+                            FeedbackScreen()
+                                .environmentObject(viewModel)
+                                .toolbar {
+                                    ToolbarItem(placement: .topBarLeading) {
+                                        Button(Texts.cancel) {
+                                            isFeedbackPresented = false
+                                        }
+                                        .foregroundColor(Colors.darkWhiteLightBlackColor)
+                                    }
+                                }
+                        }
+                    }
                 }
             }
         }

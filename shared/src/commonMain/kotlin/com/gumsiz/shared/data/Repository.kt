@@ -30,6 +30,15 @@ class Repository(
     suspend fun updateFavoriteStateInDB(wordModel: WordModel) = database.update(wordModel)
 
     suspend fun getWordFromDB(name: String): WordModel? = database.getVerb(name)
+
+    suspend fun sendFeedback(
+        email: String,
+        message: String,
+        platform: String,
+        appVersion: String = "",
+        buildNumber: String = "",
+        bundleId: String = ""
+    ): Boolean = networkService.sendFeedback(email, message, platform, appVersion, buildNumber, bundleId)
 }
 
 fun <T> Flow<T>.asCommonFlow(): CommonFlow<T> = CommonFlow(this)

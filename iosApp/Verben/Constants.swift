@@ -46,4 +46,17 @@ struct Texts {
     static let have = "habe"
     static let structure = "Strukturen"
     static let samples = "Beispiele"
+    // Feedback & Cross-Promotion
+    static let feedback = "Feedback"
+    static let feedbackTitle = "Feedback"
+    static let feedbackSubtitle = "Haben Sie Vorschläge, Fehler gefunden oder Fragen? Schreiben Sie uns!"
+    static let feedbackEmailHint = "Ihre E-Mail-Adresse (optional)"
+    static let feedbackMessageHint = "Ihre Nachricht"
+    static let feedbackSend = "Senden"
+    static let feedbackSuccess = "Vielen Dank für Ihr Feedback!"
+    static let feedbackError = "Fehler beim Senden. Bitte versuchen Sie es erneut."
+    static let feedbackInvalidEmail = "Wenn angegeben, bitte eine gültige E-Mail-Adresse eingeben."
+    static let feedbackEmptyMessage = "Bitte geben Sie eine Nachricht ein."
+    static let derDieDas = "Artikel lernen: DerDieDas (Neu)"
+    static let derDieDasStoreUrl = "https://apps.apple.com/de/app/derdiedas-universe/id6798297344"
 }

@@ -5,8 +5,10 @@ import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import kotlinx.serialization.json.Json
-//TODO enable client
+import io.ktor.client.request.parameter
+
 const val apiUrl = "https://data.gumsiz.xyz/verben/"
+const val feedbackUrl = "https://feedback.gumsiz.xyz/"
 val mockData = """
     [
                 { "name":"abbiegen", "cekim_1":"biege ab", "cekim_2":"biegst ab", "imp":"bieg ab", "pret":"bog ab", "perf":"bin abgebogen", "konj":"b\u00f6ge ab", "struktur":["(nach) RICHTUNG \/ AUF WEG \/ VON WEG"], "beispiel":["Fahr langsamer, du musst gleich abbiegen!", "An der Kreuzung da vorne musst du (nach) rechts abbiegen.", "Bieg hier mal (nach) rechts ab. Ich kenne eine Abk\u00fcrzung.", "Da vorne musst du (nach) links in die Goethestra\u00dfe abbiegen.", "", "Noch etwa 10 Kilometer, dann m\u00fcssen wir von der Autobahn abbiegen.", ""] },
@@ -34,6 +36,14 @@ val mockData = """
 """.trimIndent()
 interface NetworkService {
     suspend fun getData(): List<WordNetworkModel>
+    suspend fun sendFeedback(
+        email: String,
+        message: String,
+        platform: String,
+        appVersion: String = "",
+        buildNumber: String = "",
+        bundleId: String = ""
+    ): Boolean
 }
 
 class NetworkServiceImp(private val client: HttpClient) : NetworkService {
@@ -44,4 +54,27 @@ class NetworkServiceImp(private val client: HttpClient) : NetworkService {
         }else{
             Json.decodeFromString<List<WordNetworkModel>>(mockData)
         }
+
+    override suspend fun sendFeedback(
+        email: String,
+        message: String,
+        platform: String,
+        appVersion: String,
+        buildNumber: String,
+        bundleId: String
+    ): Boolean = try {
+        val response = client.get(feedbackUrl) {
+            parameter("type", "feedback")
+            parameter("email", email)
+            parameter("message", message)
+            parameter("app_name", "Verben")
+            parameter("platform", platform)
+            if (appVersion.isNotEmpty()) parameter("app_version", appVersion)
+            if (buildNumber.isNotEmpty()) parameter("build_number", buildNumber)
+            if (bundleId.isNotEmpty()) parameter("bundle_id", bundleId)
+        }
+        response.status.value in 200..299
+    } catch (e: Exception) {
+        false
+    }
 }

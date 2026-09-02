@@ -1,6 +1,5 @@
 package com.gumsiz.words.ui
 
-
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -8,28 +7,28 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.gumsiz.words.ui.detayf.DetailScreen
+import com.gumsiz.words.ui.feedback.FeedbackScreen
 import com.gumsiz.words.ui.mainf.MainScreen
 
 @Composable
-fun VerbenNavigation(){
+fun VerbenNavigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
         startDestination = Screen.MainScreen.route
-    ){
-        composable(Screen.MainScreen.route){
+    ) {
+        composable(Screen.MainScreen.route) {
             MainScreen(navController)
         }
         composable(
             Screen.DetailScreen.route + "/{word}",
             arguments = listOf(
-                navArgument("word"){
+                navArgument("word") {
                     type = NavType.StringType
                     nullable = false
                 }
             )
-        ){
-
+        ) {
             it.arguments?.getString("word")?.let { it1 ->
                 DetailScreen(
                     wordId = it1,
@@ -37,9 +36,14 @@ fun VerbenNavigation(){
                 )
             }
         }
+        composable(Screen.FeedbackScreen.route) {
+            FeedbackScreen(navController = navController)
+        }
     }
 }
-sealed class Screen(val route: String){
-    object MainScreen: Screen("main_screen")
-    object DetailScreen: Screen("detail_screen")
+
+sealed class Screen(val route: String) {
+    data object MainScreen : Screen("main_screen")
+    data object DetailScreen : Screen("detail_screen")
+    data object FeedbackScreen : Screen("feedback_screen")
 }

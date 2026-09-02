@@ -51,6 +51,7 @@ fun MainScreen(navController: NavController) {
             TopAppBar(
                 title = { Text(text = "Verben", color = Color.Black) },
                 actions = {
+                    val context = LocalContext.current
                     val dropdown = remember {
                         mutableStateOf(false)
                     }
@@ -74,6 +75,26 @@ fun MainScreen(navController: NavController) {
                             }
                         ) {
                             Text(text = stringResource(id = R.string.btn_menu_about))
+                        }
+                        DropdownMenuItem(
+                            onClick = {
+                                dropdown.value = false
+                                navController.navigate(Screen.FeedbackScreen.route)
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.btn_menu_feedback))
+                        }
+                        DropdownMenuItem(
+                            onClick = {
+                                dropdown.value = false
+                                val playStoreIntent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    "https://play.google.com/store/apps/details?id=com.gumsiz.derdiedas".toUri()
+                                )
+                                context.startActivity(playStoreIntent)
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.btn_menu_derdiedas))
                         }
                     }
                 },
@@ -213,11 +234,15 @@ fun FavoriteList(
                 updateList(it)
             },
             colors = TextFieldDefaults.textFieldColors(
+                textColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = primaryLightColor
+                backgroundColor = primaryLightColor,
+                focusedLabelColor = Color(0xFF333333),
+                unfocusedLabelColor = Color(0xFF616161),
+                cursorColor = Color.Black
             ),
-            label = { Text(text = "Geben Sie ein Wort ein") },
+            label = { Text(text = stringResource(id = R.string.search_bar_hint)) },
             singleLine = true
         )
         Card(
@@ -258,11 +283,15 @@ fun VerbList(
                 updateList(it)
             },
             colors = TextFieldDefaults.textFieldColors(
+                textColor = Color.Black,
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-                backgroundColor = primaryLightColor
+                backgroundColor = primaryLightColor,
+                focusedLabelColor = Color(0xFF333333),
+                unfocusedLabelColor = Color(0xFF616161),
+                cursorColor = Color.Black
             ),
-            label = { Text(text = "Geben Sie ein Wort ein") },
+            label = { Text(text = stringResource(id = R.string.search_bar_hint)) },
             singleLine = true
         )
         Card(

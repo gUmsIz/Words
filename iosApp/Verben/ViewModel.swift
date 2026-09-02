@@ -61,5 +61,24 @@ class ViewModel: ObservableObject{
             try await repo.updateFavoriteStateInDB(wordModel: wordModel!)
         }
     }
+
+    func sendFeedback(email: String, message: String) async -> Bool {
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        let buildNumber = Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? ""
+        let bundleId = Bundle.main.bundleIdentifier ?? "com.gumsiz.words.Verben"
+        do {
+            let result = try await repo.sendFeedback(
+                email: email,
+                message: message,
+                platform: "iOS",
+                appVersion: appVersion,
+                buildNumber: buildNumber,
+                bundleId: bundleId
+            )
+            return result.boolValue
+        } catch {
+            return false
+        }
+    }
 }
 

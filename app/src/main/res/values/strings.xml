@@ -12,6 +12,17 @@
     <string name="btn_menu_update">Aktualisieren</string>
     <string name="btn_menu_about">Über App</string>
     <string name="txt_about">Quelle für alle Verben und Beispielsätze ist d-seite.de (DaF für ErwachsenE)</string>
+    <string name="btn_menu_feedback">Feedback</string>
+    <string name="btn_menu_derdiedas">Artikel lernen: DerDieDas (Neu)</string>
+    <string name="feedback_title">Feedback</string>
+    <string name="feedback_subtitle">Haben Sie Vorschläge, Fehler gefunden oder Fragen? Schreiben Sie uns!</string>
+    <string name="feedback_email_hint">Ihre E-Mail-Adresse (optional)</string>
+    <string name="feedback_message_hint">Ihre Nachricht</string>
+    <string name="feedback_send_button">Senden</string>
+    <string name="feedback_success">Vielen Dank für Ihr Feedback!</string>
+    <string name="feedback_error">Fehler beim Senden. Bitte versuchen Sie es erneut.</string>
+    <string name="feedback_invalid_email">Wenn angegeben, bitte eine gültige E-Mail-Adresse eingeben.</string>
+    <string name="feedback_empty_message">Bitte geben Sie eine Nachricht ein.</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
