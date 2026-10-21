@@ -1,0 +1,8 @@
+# Android
+json_key_file("/Users/sdrmz/Documents/TempDesk/K/fastlane-local.json")
+package_name("com.gumsiz.words")
+
+# iOS
+app_identifier("com.gumsiz.words")
+apple_id("semihdurmaz@gmail.com")
+team_id("UYCZSAX6Z9")

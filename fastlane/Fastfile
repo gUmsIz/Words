@@ -1,0 +1,128 @@
+default_platform(:android)
+
+ROOT_DIR = File.expand_path("..", __dir__)
+
+platform :android do
+  desc "Build signed Android Release App Bundle (AAB)"
+  lane :build do
+    gradle(
+      task: ":app:bundleRelease",
+      project_dir: ROOT_DIR
+    )
+  end
+
+  desc "Build and upload Release AAB to Google Play Internal Testing"
+  lane :internal do |options|
+    build
+    status = options[:status] || "draft"
+    upload_to_play_store(
+      track: "internal",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      skip_upload_changelogs: true,
+      release_status: status,
+      aab: File.join(ROOT_DIR, "app/build/outputs/bundle/release/app-release.aab")
+    )
+  end
+
+  desc "Build and upload Release AAB to Google Play Production"
+  lane :release do |options|
+    build
+    status = options[:status] || "draft"
+    upload_to_play_store(
+      track: "production",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true,
+      release_status: status,
+      aab: File.join(ROOT_DIR, "app/build/outputs/bundle/release/app-release.aab")
+    )
+  end
+end
+
+platform :ios do
+  desc "Build signed iOS App (IPA)"
+  lane :build do
+    build_app(
+      project: File.join(ROOT_DIR, "iosApp/Verben.xcodeproj"),
+      scheme: "Verben",
+      configuration: "Release",
+      export_method: "app-store",
+      output_directory: File.join(ROOT_DIR, "build/ios/ipa"),
+      output_name: "Verben.ipa",
+      clean: true
+    )
+  end
+
+  desc "Build and upload to TestFlight"
+  lane :beta do
+    build
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true,
+      ipa: File.join(ROOT_DIR, "build/ios/ipa/Verben.ipa")
+    )
+  end
+
+  desc "Build and upload to App Store Connect for Release"
+  lane :release do
+    build
+    upload_to_app_store(
+      skip_metadata: true,
+      skip_screenshots: true,
+      force: true,
+      ipa: File.join(ROOT_DIR, "build/ios/ipa/Verben.ipa")
+    )
+  end
+end
+
+desc "Bump version code / build number and optionally version name for Android and iOS"
+lane :bump do |options|
+  version_name = options[:version] # e.g. "1.7.1"
+  
+  # 1. Android (app/build.gradle.kts)
+  gradle_file = File.join(ROOT_DIR, "app/build.gradle.kts")
+  content = File.read(gradle_file)
+  old_code = content[/versionCode\s*=\s*(\d+)/, 1]
+  new_code = old_code.to_i + 1
+  content.gsub!(/versionCode\s*=\s*\d+/, "versionCode = #{new_code}")
+  if version_name
+    content.gsub!(/versionName\s*=\s*"[^"]+"/, "versionName = \"#{version_name}\"")
+  end
+  File.write(gradle_file, content)
+  UI.success("Android: versionCode bumped from #{old_code} to #{new_code}")
+
+  # 2. iOS (iosApp/Verben.xcodeproj/project.pbxproj)
+  pbx_file = File.join(ROOT_DIR, "iosApp/Verben.xcodeproj/project.pbxproj")
+  pbx_content = File.read(pbx_file)
+  old_build = pbx_content[/CURRENT_PROJECT_VERSION\s*=\s*(\d+);/, 1]
+  new_build = old_build.to_i + 1
+  pbx_content.gsub!(/CURRENT_PROJECT_VERSION\s*=\s*\d+;/, "CURRENT_PROJECT_VERSION = #{new_build};")
+  if version_name
+    pbx_content.gsub!(/MARKETING_VERSION\s*=\s*[^;]+;/, "MARKETING_VERSION = #{version_name};")
+  end
+  File.write(pbx_file, pbx_content)
+  UI.success("iOS: CURRENT_PROJECT_VERSION bumped from #{old_build} to #{new_build}")
+
+  if version_name
+    UI.success("Version name updated to #{version_name} on both platforms.")
+  end
+end
+
+desc "Build release packages for both Android and iOS"
+lane :build_all do
+  android_build
+  ios_build
+end
+
+desc "Release both Android to Internal and iOS to TestFlight"
+lane :beta_all do
+  android_internal
+  ios_beta
+end
+
+desc "Release both Android and iOS to production/stores"
+lane :release_all do |options|
+  android_release(options)
+  ios_release
+end
