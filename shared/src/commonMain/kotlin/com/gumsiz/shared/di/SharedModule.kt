@@ -27,5 +27,5 @@ fun sharedModule() = module {
         }
     }
     single<NetworkService> { NetworkServiceImp(get()) }
-    single { Repository(get(), get()) }
+    single { Repository(get(), get(), get()) }
 }

@@ -8,6 +8,7 @@ class ViewModel: ObservableObject{
     var verbList : [WordModel] = []
     var verbListFavorite : [WordModel] = []
     @Published var isDataLoading = true;
+    @Published var hasClickedCrossPromotion: Bool = false
     @Published var searchResults: [WordModel] = []
     @Published var favoriteSearchResults: [WordModel] = []
     @Published var searchText: String = "" {
@@ -48,6 +49,12 @@ class ViewModel: ObservableObject{
                     self.verbListFavorite = (verbListFavorite as? [WordModel?] ?? []).compactMap{$0}
                     self.favoriteSearchResults = self.verbListFavorite
                 }
+                self.hasClickedCrossPromotion = self.repo.isCrossPromotionClicked()
+                self.repo.hasClickedCrossPromotion.watch { clicked in
+                    if let clicked = clicked as? Bool {
+                        self.hasClickedCrossPromotion = clicked
+                    }
+                }
                 isDataLoading = false
             } catch {
                 print("some error")
@@ -60,6 +67,11 @@ class ViewModel: ObservableObject{
         Task{
             try await repo.updateFavoriteStateInDB(wordModel: wordModel!)
         }
+    }
+
+    func onCrossPromotionClicked() {
+        repo.setCrossPromotionClicked()
+        self.hasClickedCrossPromotion = true
     }
 
     func sendFeedback(email: String, message: String) async -> Bool {

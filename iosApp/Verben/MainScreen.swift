@@ -75,13 +75,30 @@ struct MainScreen: View {
                                 Button(Texts.feedback) {
                                     isFeedbackPresented.toggle()
                                 }
-                                Button(Texts.derDieDas) {
+                                Button {
+                                    viewModel.onCrossPromotionClicked()
                                     if let url = URL(string: Texts.derDieDasStoreUrl) {
                                         openURL(url)
                                     }
+                                } label: {
+                                    if !viewModel.hasClickedCrossPromotion {
+                                        Label(Texts.derDieDas, systemImage: "info.circle.fill")
+                                    } else {
+                                        Text(Texts.derDieDas)
+                                    }
                                 }
                             } label: {
-                                Image(systemName: "ellipsis").foregroundColor(Colors.darkWhiteLightBlackColor)
+                                ZStack(alignment: .topTrailing) {
+                                    Image(systemName: "ellipsis")
+                                        .foregroundColor(Colors.darkWhiteLightBlackColor)
+                                        .padding(4)
+                                    if !viewModel.hasClickedCrossPromotion {
+                                        Image(systemName: "info.circle.fill")
+                                            .font(.system(size: 10))
+                                            .foregroundColor(.red)
+                                            .offset(x: 2, y: -2)
+                                    }
+                                }
                             }.alert(Texts.aboutInfo,isPresented: $isDialogVisible){
                                 Button(Texts.ok,role:.cancel) {
                                     

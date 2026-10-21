@@ -15,6 +15,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -52,17 +53,31 @@ fun MainScreen(navController: NavController) {
                 title = { Text(text = "Verben", color = Color.Black) },
                 actions = {
                     val context = LocalContext.current
+                    val hasClickedAppLink by mainViewModel.hasClickedCrossPromotion.collectAsState()
                     val dropdown = remember {
                         mutableStateOf(false)
                     }
                     IconButton(
                         onClick = { dropdown.value = true },
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.MoreVert,
-                            tint = Color.Black,
-                            contentDescription = ""
-                        )
+                        Box(contentAlignment = Alignment.Center) {
+                            Icon(
+                                imageVector = Icons.Default.MoreVert,
+                                tint = Color.Black,
+                                contentDescription = ""
+                            )
+                            if (!hasClickedAppLink) {
+                                Icon(
+                                    imageVector = Icons.Default.Info,
+                                    contentDescription = "New feature",
+                                    tint = Color.Red,
+                                    modifier = Modifier
+                                        .size(12.dp)
+                                        .align(Alignment.TopEnd)
+                                        .offset(x = 4.dp, y = (-4).dp)
+                                )
+                            }
+                        }
                     }
                     DropdownMenu(
                         expanded = dropdown.value,
@@ -87,6 +102,7 @@ fun MainScreen(navController: NavController) {
                         DropdownMenuItem(
                             onClick = {
                                 dropdown.value = false
+                                mainViewModel.onCrossPromotionClicked()
                                 val playStoreIntent = Intent(
                                     Intent.ACTION_VIEW,
                                     "https://play.google.com/store/apps/details?id=com.gumsiz.derdiedas".toUri()
@@ -94,7 +110,22 @@ fun MainScreen(navController: NavController) {
                                 context.startActivity(playStoreIntent)
                             }
                         ) {
-                            Text(text = stringResource(id = R.string.btn_menu_derdiedas))
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(text = stringResource(id = R.string.btn_menu_derdiedas))
+                                if (!hasClickedAppLink) {
+                                    Spacer(modifier = Modifier.width(8.dp))
+                                    Icon(
+                                        imageVector = Icons.Default.Info,
+                                        contentDescription = "New feature",
+                                        tint = Color.Red,
+                                        modifier = Modifier.size(16.dp)
+                                    )
+                                }
+                            }
                         }
                     }
                 },

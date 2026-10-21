@@ -35,6 +35,12 @@ class MainViewModel(private val wordRepository: Repository) :
         }
     }.stateIn(viewModelScope, SharingStarted.Eagerly, emptyList())
 
+    val hasClickedCrossPromotion = wordRepository.hasClickedCrossPromotion.stateIn(
+        viewModelScope,
+        SharingStarted.Eagerly,
+        wordRepository.isCrossPromotionClicked()
+    )
+
     val dataStateFlow = MutableStateFlow(Resource.loading(data = "null", message = ""))
 
     init {
@@ -47,6 +53,10 @@ class MainViewModel(private val wordRepository: Repository) :
 
     fun searchInFavList(text: String) {
         searchQueryInFavorite.value = text
+    }
+
+    fun onCrossPromotionClicked() {
+        wordRepository.setCrossPromotionClicked()
     }
 
 

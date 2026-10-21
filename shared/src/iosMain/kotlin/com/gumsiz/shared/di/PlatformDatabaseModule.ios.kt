@@ -3,6 +3,8 @@ package com.gumsiz.shared.di
 import androidx.room.Room
 import com.gumsiz.shared.data.db.WordsDatabase
 import com.gumsiz.shared.data.db.getRoomDatabase
+import com.gumsiz.shared.data.settings.IosSettingsStorage
+import com.gumsiz.shared.data.settings.SettingsStorage
 import kotlinx.cinterop.ExperimentalForeignApi
 import org.koin.core.module.Module
 import org.koin.dsl.module
@@ -26,4 +28,5 @@ actual fun platformDatabaseModule(): Module = module {
         )
         getRoomDatabase(builder)
     }
+    single<SettingsStorage> { IosSettingsStorage() }
 }
